@@ -1,3 +1,32 @@
 // Place all the styles related to the projects controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+@import 'mixins.css.scss';
+
+$blue: #48B1E9;
+
+#main > .projects {
+  max-width:960px;
+  width:100%;
+  margin:0 auto;
+  h1 {
+    color: $blue;
+  }
+}
+
+.projects .project {
+  background: $blue;
+  color:#fff;
+  padding:10px 20px;
+  margin: 15px 0;
+  width:50%;
+  @include border_radius(10px);
+  h2 a {
+    text-decoration:none;
+    color:#fff;
+  }
+
+  h2 a:hover {
+    text-decoration: underline;
+  }
+}
