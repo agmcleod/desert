@@ -1,0 +1,38 @@
+// Place all the styles related to the items controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+@import 'mixins.css.scss';
+
+$blue: #48B1E9;
+
+.items-menu {
+  list-style: none;
+  li {
+    float:left;
+    display:block;
+    @include top_border_radius(5px);
+    background: $blue;
+    color:#fff;
+    padding:10px 15px;
+    margin-right:5px;
+  }
+}
+
+.project .newItem {
+  display:none;
+  z-index:5;
+  position:absolute;
+  top:200px;
+  left:0px;
+  width:20%;
+  border:1px solid #333;
+  @include border_radius(10px);
+  padding:25px 35px;
+  background:white;
+  textarea {
+    display:block;
+    width:90%;
+    height:10%;
+  }
+}

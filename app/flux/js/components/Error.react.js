@@ -9,7 +9,7 @@ var Error = React.createClass({
     var message = this.props.message;
     if (message !== null && message !== "") {
       return (
-        <p class="error">{message}</p>
+        <p className="error">{message}</p>
       );
     }
     else {

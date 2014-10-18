@@ -19,7 +19,9 @@ function appendProject (project) {
       break;
     }
   }
-  _projects.push(project);
+  if (!hasProject) {
+    _projects.push(project);
+  }
   _setId = project.id;
 }
 
@@ -38,6 +40,17 @@ var ProjectStore = merge(EventEmitter.prototype, {
 
   emitChange: function () {
     this.emit(CHANGE_EVENT);
+  },
+
+  findById: function (id) {
+    var project = null;
+    for (var i = 0; i < _projects.length; i++) {
+      if (_projects[i].id === id) {
+        project = _projects[i];
+      }
+    }
+    console.log(project);
+    return project;
   },
 
   getAll: function () {

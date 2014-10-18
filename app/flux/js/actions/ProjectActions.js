@@ -23,6 +23,16 @@ var ProjectActions = {
         projects: data
       });
     });
+  },
+
+  getProjectInformation: function (id) {
+    $.when($.get('/projects/' + id + '.json'), $.get('/projects/' + id + '/items.json')).done(function (projectData, itemsData) {
+      AppDispatcher.handleViewAction({
+        actionType: ProjectConstants.PROJECT_SHOW,
+        project: projectData[0],
+        items: itemsData[0]
+      });
+    });
   }
 };
 

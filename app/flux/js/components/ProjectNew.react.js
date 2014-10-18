@@ -17,7 +17,6 @@ var ProjectNew = React.createClass({
   componentWillUnmount: function () {
     ProjectStore.removeChangeListener(this._onChange);
   },
-
   
   getInitialState: function () {
     return {

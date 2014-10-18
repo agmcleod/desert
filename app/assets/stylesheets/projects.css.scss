@@ -5,13 +5,17 @@
 
 $blue: #48B1E9;
 
-#main > .projects {
+#main > .projects, #main > .project {
   max-width:960px;
   width:100%;
   margin:0 auto;
   h1 {
     color: $blue;
   }
+}
+
+#main > .project {
+  position:relative;
 }
 
 .projects .project {
