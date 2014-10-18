@@ -561,3 +561,122 @@ Started GET "/assets/main.css?body=1" for 127.0.0.1 at 2014-10-18 10:18:04 -0400
 
 
 Started GET "/assets/application.css?body=1" for 127.0.0.1 at 2014-10-18 10:18:04 -0400
+
+
+Started GET "/projects" for 127.0.0.1 at 2014-10-18 11:10:24 -0400
+
+AbstractController::ActionNotFound (The action 'index' could not be found for ProjectsController):
+  actionpack (4.1.6) lib/abstract_controller/base.rb:131:in `process'
+  actionview (4.1.6) lib/action_view/rendering.rb:30:in `process'
+  actionpack (4.1.6) lib/action_controller/metal.rb:196:in `dispatch'
+  actionpack (4.1.6) lib/action_controller/metal/rack_delegation.rb:13:in `dispatch'
+  actionpack (4.1.6) lib/action_controller/metal.rb:232:in `block in action'
+  actionpack (4.1.6) lib/action_dispatch/routing/route_set.rb:82:in `call'
+  actionpack (4.1.6) lib/action_dispatch/routing/route_set.rb:82:in `dispatch'
+  actionpack (4.1.6) lib/action_dispatch/routing/route_set.rb:50:in `call'
+  actionpack (4.1.6) lib/action_dispatch/journey/router.rb:73:in `block in call'
+  actionpack (4.1.6) lib/action_dispatch/journey/router.rb:59:in `each'
+  actionpack (4.1.6) lib/action_dispatch/journey/router.rb:59:in `call'
+  actionpack (4.1.6) lib/action_dispatch/routing/route_set.rb:678:in `call'
+  rack (1.5.2) lib/rack/etag.rb:23:in `call'
+  rack (1.5.2) lib/rack/conditionalget.rb:25:in `call'
+  rack (1.5.2) lib/rack/head.rb:11:in `call'
+  actionpack (4.1.6) lib/action_dispatch/middleware/params_parser.rb:27:in `call'
+  actionpack (4.1.6) lib/action_dispatch/middleware/flash.rb:254:in `call'
+  rack (1.5.2) lib/rack/session/abstract/id.rb:225:in `context'
+  rack (1.5.2) lib/rack/session/abstract/id.rb:220:in `call'
+  actionpack (4.1.6) lib/action_dispatch/middleware/cookies.rb:560:in `call'
+  activerecord (4.1.6) lib/active_record/query_cache.rb:36:in `call'
+  activerecord (4.1.6) lib/active_record/connection_adapters/abstract/connection_pool.rb:621:in `call'
+  activerecord (4.1.6) lib/active_record/migration.rb:380:in `call'
+  actionpack (4.1.6) lib/action_dispatch/middleware/callbacks.rb:29:in `block in call'
+  activesupport (4.1.6) lib/active_support/callbacks.rb:82:in `run_callbacks'
+  actionpack (4.1.6) lib/action_dispatch/middleware/callbacks.rb:27:in `call'
+  actionpack (4.1.6) lib/action_dispatch/middleware/reloader.rb:73:in `call'
+  actionpack (4.1.6) lib/action_dispatch/middleware/remote_ip.rb:76:in `call'
+  actionpack (4.1.6) lib/action_dispatch/middleware/debug_exceptions.rb:17:in `call'
+  actionpack (4.1.6) lib/action_dispatch/middleware/show_exceptions.rb:30:in `call'
+  railties (4.1.6) lib/rails/rack/logger.rb:38:in `call_app'
+  railties (4.1.6) lib/rails/rack/logger.rb:20:in `block in call'
+  activesupport (4.1.6) lib/active_support/tagged_logging.rb:68:in `block in tagged'
+  activesupport (4.1.6) lib/active_support/tagged_logging.rb:26:in `tagged'
+  activesupport (4.1.6) lib/active_support/tagged_logging.rb:68:in `tagged'
+  railties (4.1.6) lib/rails/rack/logger.rb:20:in `call'
+  actionpack (4.1.6) lib/action_dispatch/middleware/request_id.rb:21:in `call'
+  rack (1.5.2) lib/rack/methodoverride.rb:21:in `call'
+  rack (1.5.2) lib/rack/runtime.rb:17:in `call'
+  activesupport (4.1.6) lib/active_support/cache/strategy/local_cache_middleware.rb:26:in `call'
+  rack (1.5.2) lib/rack/lock.rb:17:in `call'
+  actionpack (4.1.6) lib/action_dispatch/middleware/static.rb:64:in `call'
+  rack (1.5.2) lib/rack/sendfile.rb:112:in `call'
+  railties (4.1.6) lib/rails/engine.rb:514:in `call'
+  railties (4.1.6) lib/rails/application.rb:144:in `call'
+  rack (1.5.2) lib/rack/lock.rb:17:in `call'
+  rack (1.5.2) lib/rack/content_length.rb:14:in `call'
+  rack (1.5.2) lib/rack/handler/webrick.rb:60:in `service'
+  /Users/aaronmcleod/.rvm/rubies/ruby-2.0.0-p247/lib/ruby/2.0.0/webrick/httpserver.rb:138:in `service'
+  /Users/aaronmcleod/.rvm/rubies/ruby-2.0.0-p247/lib/ruby/2.0.0/webrick/httpserver.rb:94:in `run'
+  /Users/aaronmcleod/.rvm/rubies/ruby-2.0.0-p247/lib/ruby/2.0.0/webrick/server.rb:295:in `block in start_thread'
+
+
+  Rendered /Users/aaronmcleod/.rvm/gems/ruby-2.0.0-p247/gems/actionpack-4.1.6/lib/action_dispatch/middleware/templates/rescues/unknown_action.html.erb within rescues/layout (1.4ms)
+
+
+Started GET "/projects" for 127.0.0.1 at 2014-10-18 11:10:45 -0400
+Processing by ProjectsController#index as HTML
+  Rendered projects/index.html.haml within layouts/application (0.9ms)
+Completed 200 OK in 141ms (Views: 140.7ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/assets/home.css?body=1" for 127.0.0.1 at 2014-10-18 11:10:46 -0400
+
+
+Started GET "/assets/jquery.js?body=1" for 127.0.0.1 at 2014-10-18 11:10:46 -0400
+
+
+Started GET "/assets/main.css?body=1" for 127.0.0.1 at 2014-10-18 11:10:46 -0400
+
+
+Started GET "/assets/projects.css?body=1" for 127.0.0.1 at 2014-10-18 11:10:46 -0400
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 127.0.0.1 at 2014-10-18 11:10:46 -0400
+
+
+Started GET "/assets/application.css?body=1" for 127.0.0.1 at 2014-10-18 11:10:46 -0400
+
+
+Started GET "/assets/bundle.js?body=1" for 127.0.0.1 at 2014-10-18 11:10:46 -0400
+
+
+Started GET "/assets/application.js?body=1" for 127.0.0.1 at 2014-10-18 11:10:46 -0400
+
+
+Started GET "/" for 127.0.0.1 at 2014-10-18 11:10:50 -0400
+Processing by HomeController#index as HTML
+  Rendered home/index.html.haml within layouts/application (0.6ms)
+Completed 200 OK in 61ms (Views: 60.9ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/assets/home.css?body=1" for 127.0.0.1 at 2014-10-18 11:10:50 -0400
+
+
+Started GET "/assets/application.css?body=1" for 127.0.0.1 at 2014-10-18 11:10:50 -0400
+
+
+Started GET "/assets/main.css?body=1" for 127.0.0.1 at 2014-10-18 11:10:50 -0400
+
+
+Started GET "/assets/jquery.js?body=1" for 127.0.0.1 at 2014-10-18 11:10:50 -0400
+
+
+Started GET "/assets/jquery_ujs.js?body=1" for 127.0.0.1 at 2014-10-18 11:10:51 -0400
+
+
+Started GET "/assets/projects.css?body=1" for 127.0.0.1 at 2014-10-18 11:10:51 -0400
+
+
+Started GET "/assets/application.js?body=1" for 127.0.0.1 at 2014-10-18 11:10:51 -0400
+
+
+Started GET "/assets/bundle.js?body=1" for 127.0.0.1 at 2014-10-18 11:10:51 -0400
