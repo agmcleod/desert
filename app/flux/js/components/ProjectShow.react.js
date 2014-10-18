@@ -3,14 +3,13 @@ var React = require('react');
 
 var ProjectStore = require('../stores/ProjectStore');
 var ProjectActions = require('../actions/ProjectActions');
-var ItemStore = require('../stores/ItemStore');
-var ItemActions = require('../actions/ItemActions');
 var Project = require('./Project.react');
 var Loading = require('./Loading.react');
 
-function getProjectShowState (id) {
+function getProjectShowState (id, items)  {
   return {
-    project: ProjectStore.findById(id)
+    project: ProjectStore.findById(id),
+    items: items
   };
 }
 
@@ -19,12 +18,10 @@ var ProjectShow = React.createClass({
     var id = this.props.params.id;
     ProjectActions.getProjectInformation(id);
     ProjectStore.addChangeListener(this._onChange);
-    ItemStore.addChangeListener(this._onItemChange);
   },
 
   componentWillUnmount: function () {
     ProjectStore.removeChangeListener(this._onChange);
-    ItemStore.removeChangeListener(this._onItemChange);
   },
 
   getInitialState: function () {
@@ -48,11 +45,7 @@ var ProjectShow = React.createClass({
   },
 
   _onChange: function () {
-    this.setState(getProjectShowState(ProjectStore.getSetId()));
-  },
-
-  _onItemChange: function () {
-
+    this.setState(getProjectShowState(ProjectStore.getSetId(), ProjectStore.getItems()));
   },
 
   render: function () {
@@ -106,7 +99,7 @@ var ProjectShow = React.createClass({
 
   saveItem: function (e) {
     e.preventDefault();
-    ItemActions.createItem(this.state);
+    ProjectActions.createItem(this.state);
   },
 
   toggleCompleted: function () {

@@ -1,6 +1,7 @@
 var keyMirror = require('react/lib/keyMirror');
 
 module.exports = keyMirror({
+  ITEM_CREATE: null,
   PROJECT_CREATE: null,
   PROJECT_CREATE_FAIL: null,
   PROJECT_DESTROY: null,

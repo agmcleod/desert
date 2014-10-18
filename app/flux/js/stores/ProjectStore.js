@@ -6,24 +6,11 @@ var Router = require('react-router');
 
 var _errors = null;
 var _projects = [];
+var _items = [];
 var _setId = null;
+var _setItemId = null;
 
 var CHANGE_EVENT = 'change';
-
-function appendProject (project) {
-  var hasProject = false;
-  for (var i = 0; i < _projects.length; i++) {
-    var p = _projects[i];
-    if (typeof project.id === "number" && p.id === project.id) {
-      hasProject = true;
-      break;
-    }
-  }
-  if (!hasProject) {
-    _projects.push(project);
-  }
-  _setId = project.id;
-}
 
 function setErrors (errors) {
   _errors = errors;
@@ -36,6 +23,36 @@ function setProjects (projects) {
 var ProjectStore = merge(EventEmitter.prototype, {
   addChangeListener: function(callback) {
     this.on(CHANGE_EVENT, callback);
+  },
+
+  appendItem: function (item) {
+    var hasItem = false;
+    for (var i = 0; i < _items.length; i++) {
+      var it = _items[i];
+      if (typeof item.id === "number" && it.id === item.id) {
+        hasItem = true;
+        break;
+      }
+    }
+    if (!hasItem) {
+      _items.push(item);
+    }
+    _setItemId = item.id;
+  },
+
+  appendProject: function (project) {
+    var hasProject = false;
+    for (var i = 0; i < _projects.length; i++) {
+      var p = _projects[i];
+      if (typeof project.id === "number" && p.id === project.id) {
+        hasProject = true;
+        break;
+      }
+    }
+    if (!hasProject) {
+      _projects.push(project);
+    }
+    _setId = project.id;
   },
 
   emitChange: function () {
@@ -57,12 +74,20 @@ var ProjectStore = merge(EventEmitter.prototype, {
     return _projects;
   },
 
+  getItems: function () {
+    return _items;
+  },
+
   getErrors: function () {
     return _errors;
   },
 
   getSetId: function () {
     return _setId;
+  },
+
+  getSetItemId: function () {
+    return _setItemId;
   },
 
   removeChangeListener: function(callback) {
@@ -78,8 +103,11 @@ AppDispatcher.register(function(payload) {
   var action = payload.action;
 
   switch(action.actionType) {
+    case ProjectConstants.ITEM_CREATE:
+      ProjectStore.appendItem(action.item);
+      break;
     case ProjectConstants.PROJECT_CREATE:
-      appendProject(action.project);
+      ProjectStore.appendProject(action.project);
       break;
 
     case ProjectConstants.PROJECT_CREATE_FAIL:
@@ -91,7 +119,7 @@ AppDispatcher.register(function(payload) {
       break;
 
     case ProjectConstants.PROJECT_SHOW:
-      appendProject(action.project);
+      ProjectStore.appendProject(action.project);
       break;
 
     case ProjectConstants.PROJECT_DESTROY:
