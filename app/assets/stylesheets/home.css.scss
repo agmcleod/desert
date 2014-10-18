@@ -1,0 +1,36 @@
+// Place all the styles related to the home controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.home {
+  height:100%;
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  .projects, .journal {
+    width:50%;
+    float:left;
+    height:100%;
+    h1 {
+      text-align:center;
+      color:#fff;
+      font-size:2.3em;
+      width:100%;
+      margin-top:10%;
+      a {
+        color:#fff;
+        text-decoration:none;
+      }
+    }
+  }
+
+  .projects {
+    background: #3BDBFF;
+  }
+
+  .journal {
+    background: #3BFFDE;
+  }
+}
