@@ -65,13 +65,13 @@ var ProjectShow = React.createClass({
         if (this.state.items.hasOwnProperty(id)) {
           var item = this.state.items[id];
           if (item.state === "todo") {
-            todoItems.push(<Item item={item} />);
+            todoItems.push(<Item item={item} key={id} />);
           }
           else if (item.state === "inprogress") {
-            progressItems.push(<Item item={item} />);
+            progressItems.push(<Item item={item} key={id} />);
           }
           else if (item.state === "completed") {
-            completedItems.push(<Item item={item} />);
+            completedItems.push(<Item item={item} key={id} />);
           }
         }
       }
