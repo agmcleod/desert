@@ -61,17 +61,18 @@ var ProjectShow = React.createClass({
       var todoItems = [];
       var progressItems = [];
       var completedItems = [];
-
-      for (var i = 0; i < this.state.items.length; i++) {
-        var item = this.state.items[i];
-        if (item.state === "todo") {
-          todoItems.push(<Item item={item} />);
-        }
-        else if (item.state === "inprogress") {
-          progressItems.push(<Item item={item} />);
-        }
-        else if (item.state === "completed") {
-          completedItems.push(<Item item={item} />);
+      for (var id in this.state.items) {
+        if (this.state.items.hasOwnProperty(id)) {
+          var item = this.state.items[id];
+          if (item.state === "todo") {
+            todoItems.push(<Item item={item} />);
+          }
+          else if (item.state === "inprogress") {
+            progressItems.push(<Item item={item} />);
+          }
+          else if (item.state === "completed") {
+            completedItems.push(<Item item={item} />);
+          }
         }
       }
 
@@ -100,12 +101,12 @@ var ProjectShow = React.createClass({
           <div className="newItem">
             <form action={itemFormHref} method="post" onSubmit={this.saveItem}>
               <div className="field">
-                <label for="title">Title</label><br />
+                <label htmlFor="title">Title</label><br />
                 <input type="text" id="title" onChange={this.handleChange("title")} />
               </div>
 
               <div className="field">
-                <label for="description">Description</label><br />
+                <label htmlFor="description">Description</label><br />
                 <textarea id="description" rows="4" onChange={this.handleChange("description")} />
               </div>
 

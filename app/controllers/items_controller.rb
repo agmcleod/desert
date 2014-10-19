@@ -18,7 +18,7 @@ class ItemsController < ApplicationController
     @items = Item.where(project_id: params[:project_id])
     respond_to do |format|
       format.html
-      format.json { render json: @items }
+      format.json { render json: CollectionDecorator.collection_as_id_map(@items) }
     end
   end
 

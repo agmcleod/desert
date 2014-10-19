@@ -5,7 +5,7 @@ class ProjectsController < ApplicationController
     respond_to do |format|
       if @project.save
         format.html
-        format.json { render json: @project }
+        format.json { render json: @project.to_json }
       else
         format.html { render :new }
         format.json { render json: { errors: @project.errors }, status: 422 }
@@ -17,7 +17,7 @@ class ProjectsController < ApplicationController
     @projects = Project.order :title
     respond_to do |format|
       format.html
-      format.json { render json: @projects }
+      format.json { render json: CollectionDecorator.collection_as_id_map(@projects) }
     end
   end
 

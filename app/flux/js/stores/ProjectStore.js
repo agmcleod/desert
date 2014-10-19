@@ -5,8 +5,8 @@ var merge = require("react/lib/merge");
 var Router = require('react-router');
 
 var _errors = null;
-var _projects = [];
-var _items = [];
+var _projects = {};
+var _items = {};
 var _setId = null;
 var _setItemId = null;
 
@@ -18,32 +18,12 @@ var ProjectStore = merge(EventEmitter.prototype, {
   },
 
   appendItem: function (item) {
-    var hasItem = false;
-    for (var i = 0; i < _items.length; i++) {
-      var it = _items[i];
-      if (typeof item.id === "number" && it.id === item.id) {
-        hasItem = true;
-        break;
-      }
-    }
-    if (!hasItem) {
-      _items.push(item);
-    }
+    _items[item.id] = item;
     _setItemId = item.id;
   },
 
   appendProject: function (project) {
-    var hasProject = false;
-    for (var i = 0; i < _projects.length; i++) {
-      var p = _projects[i];
-      if (typeof project.id === "number" && p.id === project.id) {
-        hasProject = true;
-        break;
-      }
-    }
-    if (!hasProject) {
-      _projects.push(project);
-    }
+    _projects[project.id] = project;
     _setId = project.id;
   },
 
@@ -53,12 +33,10 @@ var ProjectStore = merge(EventEmitter.prototype, {
 
   findById: function (id) {
     var project = null;
-    for (var i = 0; i < _projects.length; i++) {
-      if (_projects[i].id === id) {
-        project = _projects[i];
-      }
+    if (_projects[id]) {
+      project = _projects[id];
     }
-    return project;
+    return _projects[id];
   },
 
   getAll: function () {
@@ -90,11 +68,19 @@ var ProjectStore = merge(EventEmitter.prototype, {
   },
 
   setItems: function (items) {
-    _items = items;
+    for (var key in items) {
+      if (items.hasOwnProperty(key)) {
+        _items[parseInt(key)] = items[key];
+      }
+    }
   },
 
   setProjects: function (projects) {
-    _projects = projects;
+    for (var key in projects) {
+      if (projects.hasOwnProperty(key)) {
+        _projects[parseInt(key)] = projects[key];
+      }
+    }
   }
 });
 

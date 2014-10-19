@@ -4,7 +4,7 @@ var ReactPropTypes = React.PropTypes;
 
 var Item = React.createClass({
   propTypes: {
-    project: ReactPropTypes.object.isRequired
+    item: ReactPropTypes.object.isRequired
   },
   render: function () {
     var item = this.props.item;
