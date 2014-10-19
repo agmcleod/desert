@@ -82,15 +82,19 @@ var ProjectShow = React.createClass({
             <a href={newItemHref} onClick={this.newItem}>New Item</a>
           </p>
           <div className="items">
-            <ul className="items-menu">
-              <li onClick={this.toggleTodo}>To Do</li>
-              <li onClick={this.toggleProgress}>In Progress</li>
-              <li onClick={this.toggleCompleted}>Completed</li>
-            </ul>
             <div className="itemlists">
-              <ul className="todoItems">{todoItems}</ul>
-              <ul className="progressItems">{progressItems}</ul>
-              <ul className="completedItems">{completedItems}</ul>
+              <div className="todoItems">
+                <a className="todoTab" onClick={this.toggleTodo}>To Do</a>
+                <ul>{todoItems}</ul>
+              </div>
+              <div className="progressItems">
+                <a className="inprogressTab" onClick={this.toggleProgress}>In Progress</a>
+                <ul>{progressItems}</ul>
+              </div>
+              <div className="completedItems">
+                <a className="completedTab" onClick={this.toggleCompleted}>Completed</a>
+                <ul>{completedItems}</ul>
+              </div>
             </div>
           </div>
           <div className="newItem">

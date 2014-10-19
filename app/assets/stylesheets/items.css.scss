@@ -6,16 +6,36 @@
 
 $blue: #48B1E9;
 
-.items-menu {
-  list-style: none;
-  li {
+.todoTab, .inprogressTab, .completedTab {
+  @include top_border_radius(5px);
+  background: $blue;
+  color:#fff;
+  padding:10px 15px;
+  display:block;
+  width:33%;
+  margin-left:6px;
+}
+
+.itemlists {
+  list-style:none;
+  overflow:hidden;
+  div {
+    width:28%;
     float:left;
-    display:block;
-    @include top_border_radius(5px);
-    background: $blue;
-    color:#fff;
-    padding:10px 15px;
-    margin-right:5px;
+  }
+  ul {
+    padding:5px;
+    margin:0 1% 0 0;
+    background: #A7D8F0;
+    min-height:35px;
+    @include border_radius(10px);
+    .item {
+      color:#fff;
+      @include border_radius(10px);
+      background: $blue;
+      margin:5px 0;
+      padding:5px 10px;
+    }
   }
 }
 
