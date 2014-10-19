@@ -5,11 +5,14 @@ var ProjectStore = require('../stores/ProjectStore');
 var ProjectActions = require('../actions/ProjectActions');
 var Project = require('./Project.react');
 var Loading = require('./Loading.react');
+var Item = require('./Item.react');
 
-function getProjectShowState (id, items)  {
+function getProjectShowState (id, items, state)  {
   return {
     project: ProjectStore.findById(id),
-    items: items
+    items: items,
+    title: state.title,
+    description: state.description
   };
 }
 
@@ -27,7 +30,9 @@ var ProjectShow = React.createClass({
   getInitialState: function () {
     return {
       title: "",
-      description: ""
+      description: "",
+      project: null,
+      items: []
     };
   },
 
@@ -45,14 +50,31 @@ var ProjectShow = React.createClass({
   },
 
   _onChange: function () {
-    this.setState(getProjectShowState(ProjectStore.getSetId(), ProjectStore.getItems()));
+    this.setState(getProjectShowState(ProjectStore.getSetId(), ProjectStore.getItems(), this.state));
+    $('.newItem').hide();
   },
 
   render: function () {
-    var component;
-    if (typeof this.state.project !== "undefined") {
+    if (this.state.project !== null) {
       var itemFormHref = "/projects/" + this.state.project.id + "/items"; 
       var newItemHref = "/projects/" + this.state.project.id + "/items/new";
+      var todoItems = [];
+      var progressItems = [];
+      var completedItems = [];
+
+      for (var i = 0; i < this.state.items.length; i++) {
+        var item = this.state.items[i];
+        if (item.state === "todo") {
+          todoItems.push(<Item item={item} />);
+        }
+        else if (item.state === "inprogress") {
+          progressItems.push(<Item item={item} />);
+        }
+        else if (item.state === "completed") {
+          completedItems.push(<Item item={item} />);
+        }
+      }
+
       return (
         <div className="project project-show items">
           <h1>{this.state.project.title}</h1>
@@ -66,6 +88,9 @@ var ProjectShow = React.createClass({
               <li onClick={this.toggleCompleted}>Completed</li>
             </ul>
             <div className="itemlists">
+              <ul className="todoItems">{todoItems}</ul>
+              <ul className="progressItems">{progressItems}</ul>
+              <ul className="completedItems">{completedItems}</ul>
             </div>
           </div>
           <div className="newItem">

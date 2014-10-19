@@ -12,14 +12,6 @@ var _setItemId = null;
 
 var CHANGE_EVENT = 'change';
 
-function setErrors (errors) {
-  _errors = errors;
-}
-
-function setProjects (projects) {
-  _projects = projects;
-}
-
 var ProjectStore = merge(EventEmitter.prototype, {
   addChangeListener: function(callback) {
     this.on(CHANGE_EVENT, callback);
@@ -66,7 +58,6 @@ var ProjectStore = merge(EventEmitter.prototype, {
         project = _projects[i];
       }
     }
-    console.log(project);
     return project;
   },
 
@@ -95,7 +86,15 @@ var ProjectStore = merge(EventEmitter.prototype, {
   },
 
   setErrors: function (err) {
-    setErrors(err);
+    _errors = errors;
+  },
+
+  setItems: function (items) {
+    _items = items;
+  },
+
+  setProjects: function (projects) {
+    _projects = projects;
   }
 });
 
@@ -111,15 +110,16 @@ AppDispatcher.register(function(payload) {
       break;
 
     case ProjectConstants.PROJECT_CREATE_FAIL:
-      setErrors(action.errors);
+      ProjectStore.setErrors(action.errors);
       break;
 
     case ProjectConstants.PROJECT_LIST:
-      setProjects(action.projects);
+      ProjectStore.setProjects(action.projects);
       break;
 
     case ProjectConstants.PROJECT_SHOW:
       ProjectStore.appendProject(action.project);
+      ProjectStore.setItems(action.items);
       break;
 
     case ProjectConstants.PROJECT_DESTROY:

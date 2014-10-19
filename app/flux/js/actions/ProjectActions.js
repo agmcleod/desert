@@ -4,13 +4,14 @@ var ProjectConstants = require("../constants/ProjectConstants");
 var ProjectActions = {
   createItem: function (data) {
     var postData = { item: { title: data.title, description: data.description, project_id: data.project.id } };
-    $.post("/projects/" + data.project.id + "/items", postData).done(function (itemResData) {
+    $.post("/projects/" + data.project.id + "/items.json", postData).done(function (itemResData) {
       AppDispatcher.handleViewAction({
-        actionType: ItemConstants.ITEM_CREATE,
+        actionType: ProjectConstants.ITEM_CREATE,
         item: itemResData
       });
     });
   },
+
   createProject: function (data) {
     $.post("/projects.json", { project: data }).done(function (data) {
       AppDispatcher.handleViewAction({
