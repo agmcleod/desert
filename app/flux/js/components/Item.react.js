@@ -41,13 +41,14 @@ var Item = React.createClass({
       originX: e.pageX,
       originY: e.pageY,
       elementX: pageOffset.left,
-      elementY: pageOffset.top
+      elementY: pageOffset.top,
+      width: $(this.getDOMNode()).width()
     });
     e.stopPropagation()
     e.preventDefault()
   },
   onMouseUp: function (e) {
-    this.setState({dragging: false})
+    this.setState({dragging: false, style: this.getInitialState().style });
     e.stopPropagation()
     e.preventDefault()
   },
@@ -61,7 +62,8 @@ var Item = React.createClass({
       style: {
         position: 'absolute',
         left: this.state.elementX + deltaX + document.body.scrollLeft,
-        top: this.state.elementY + deltaY + document.body.scrollTop
+        top: this.state.elementY + deltaY + document.body.scrollTop,
+        width: this.state.width
       }
     });
     e.stopPropagation()
