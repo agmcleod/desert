@@ -17,16 +17,13 @@ var Item = React.createClass({
     }
   },
 
-  getDefaultProps: function () {
-    return {
-      // allow the initial position to be passed in as a prop
-      initialPos: {x: 0, y: 0}
-    }
-  },
-
   getInitialState: function () {
     return {
-      pos: this.props.initialPos,
+      style: {
+        top: 0,
+        left: 0,
+        position: 'relative'
+      },
       dragging: false,
       rel: null // position relative to the cursor
     }
@@ -38,13 +35,13 @@ var Item = React.createClass({
     if (e.button !== 0) {
       return;
     }
-    var pos = $(this.getDOMNode()).offset()
+    var pageOffset = $(this.getDOMNode()).offset();
     this.setState({
       dragging: true,
-      rel: {
-        x: e.pageX - pos.left,
-        y: e.pageY - pos.top
-      }
+      originX: e.pageX,
+      originY: e.pageY,
+      elementX: pageOffset.left,
+      elementY: pageOffset.top
     });
     e.stopPropagation()
     e.preventDefault()
@@ -55,13 +52,18 @@ var Item = React.createClass({
     e.preventDefault()
   },
   onMouseMove: function (e) {
-    if (!this.state.dragging) return
+    if (!this.state.dragging) {
+      return;
+    }
+    var deltaX = e.pageX - this.state.originX;
+    var deltaY = e.pageY - this.state.originY;
     this.setState({
-      pos: {
-        x: e.pageX - this.state.rel.x,
-        y: e.pageY - this.state.rel.y
+      style: {
+        position: 'absolute',
+        left: this.state.elementX + deltaX + document.body.scrollLeft,
+        top: this.state.elementY + deltaY + document.body.scrollTop
       }
-    })
+    });
     e.stopPropagation()
     e.preventDefault()
   },
@@ -71,8 +73,9 @@ var Item = React.createClass({
   },
   render: function () {
     var item = this.props.item;
+    var className = "item " + (this.state.dragging ? "dragging" : "");
     return (
-      <li className="item" onMouseDown={this.onMouseDown}>{item.title}</li>
+      <li className={className} onMouseDown={this.onMouseDown} style={this.state.style}>{item.title}</li>
     );
   }
 });

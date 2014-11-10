@@ -17,13 +17,13 @@ $blue: #48B1E9;
 }
 
 .itemlists {
-  list-style:none;
   overflow:hidden;
   div {
     width:28%;
     float:left;
   }
   ul {
+    list-style:none;
     padding:5px;
     margin:0 1% 0 0;
     background: #A7D8F0;
