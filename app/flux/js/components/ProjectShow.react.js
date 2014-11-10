@@ -17,6 +17,9 @@ function getProjectShowState (id, items, state)  {
 }
 
 var ProjectShow = React.createClass({
+  completedOnMouseUp: function () {
+
+  },
   componentDidMount: function () {
     var id = this.props.params.id;
     ProjectActions.getProjectInformation(id);
@@ -54,6 +57,10 @@ var ProjectShow = React.createClass({
     $('.newItem').hide();
   },
 
+  progressOnMouseUp: function () {
+    
+  },
+
   render: function () {
     if (this.state.project !== null) {
       var itemFormHref = "/projects/" + this.state.project.id + "/items"; 
@@ -86,15 +93,15 @@ var ProjectShow = React.createClass({
             <div className="itemlists">
               <div className="todoItems">
                 <a className="todoTab" onClick={this.toggleTodo}>To Do</a>
-                <ul>{todoItems}</ul>
+                <ul onMouseUp={this.todoOnMouseUp}>{todoItems}</ul>
               </div>
               <div className="progressItems">
                 <a className="inprogressTab" onClick={this.toggleProgress}>In Progress</a>
-                <ul>{progressItems}</ul>
+                <ul onMouseUp={this.progressOnMouseUp}>{progressItems}</ul>
               </div>
               <div className="completedItems">
                 <a className="completedTab" onClick={this.toggleCompleted}>Completed</a>
-                <ul>{completedItems}</ul>
+                <ul onMouseUp={this.completedOnMouseUp}>{completedItems}</ul>
               </div>
             </div>
           </div>
@@ -130,6 +137,10 @@ var ProjectShow = React.createClass({
   saveItem: function (e) {
     e.preventDefault();
     ProjectActions.createItem(this.state);
+  },
+
+  todoOnMouseUp: function () {
+
   },
 
   toggleCompleted: function () {
