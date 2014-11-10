@@ -22,12 +22,12 @@ default: &default
 development:
   <<: *default
   database: desert_development
-  username: aaronmcleod
+  username: aaron.mcleod
   host: localhost
 test:
   <<: *default
   database: desert_test
-  username: aaronmcleod
+  username: aaron.mcleod
   host: localhost
 
 production:
