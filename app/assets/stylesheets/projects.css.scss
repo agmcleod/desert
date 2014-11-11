@@ -30,3 +30,16 @@ $blue: #48B1E9;
     text-decoration: underline;
   }
 }
+
+.projects-new form {
+  width:40%;
+  .text-field input, textarea {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width:700px) {
+  .projects-new form {
+    width: 90%;
+  }
+}

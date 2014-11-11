@@ -59,7 +59,7 @@ var Item = React.createClass({
 
     // TODO: Figure out a way without querying the DOM like this.
     var stateName;
-    $('.itemListContainer[id!="'+ this.props.state +'Items"]').each(function () {
+    $('.item-list-container[id!="'+ this.props.state +'-items"]').each(function () {
       var rect = this.getBoundingClientRect();
       if (x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom) {
         stateName = $(this).data('state-name');

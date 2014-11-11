@@ -1,3 +1,5 @@
+@import 'mixins.css.scss';
+
 body {
   margin:0;
   padding:0;
@@ -12,4 +14,26 @@ ul {
 
 .error {
   color:red;
+}
+
+.text-field input {
+  height: 25px;
+}
+
+.field label {
+  display:block;
+  margin: 5px 0;
+}
+
+.field-submit input {
+  height: 30px;
+  background: white;
+  color: #333;
+  padding:5px 20px;
+}
+
+.text-field input, textarea, .field-submit input {
+  border: 1px solid #aaa;
+  @include border_radius(5px);
+  margin:5px 0;
 }

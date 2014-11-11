@@ -91,6 +91,7 @@ AppDispatcher.register(function(payload) {
 
     case ProjectConstants.PROJECT_LIST:
       ProjectStore.setProjects(action.projects);
+      emit = true;
       break;
 
     case ProjectConstants.PROJECT_SHOW:

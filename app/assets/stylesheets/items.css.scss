@@ -6,7 +6,7 @@
 
 $blue: #48B1E9;
 
-.todoTab, .inprogressTab, .completedTab {
+.todo-tab, .inprogress-tab, .completed-tab {
   @include top_border_radius(5px);
   background: $blue;
   color:#fff;
@@ -42,20 +42,27 @@ $blue: #48B1E9;
   }
 }
 
-.project .newItem {
+.project .new-item {
   display:none;
   z-index:5;
   position:absolute;
   top:200px;
   left:0px;
   width:20%;
-  border:1px solid #333;
+  background: #36A8ED;
   @include border_radius(10px);
   padding:25px 35px;
-  background:white;
   textarea {
     display:block;
     width:90%;
     height:10%;
+  }
+
+  textarea, .text-field {
+    width: 100%;
+  }
+
+  label {
+    color:white;
   }
 }

@@ -59,7 +59,8 @@ var ProjectShow = React.createClass({
 
   newItem: function (e) {
     e.preventDefault();
-    $('.newItem').show();
+    $('.new-item').show();
+    $('.new-item').css('left', $('.todo-items').offset().left);
   },
 
   _onChange: function () {
@@ -95,29 +96,29 @@ var ProjectShow = React.createClass({
           </p>
           <div className="items">
             <div className="itemlists">
-              <div className="todoItems itemListContainer" data-state-name="todo">
-                <a className="todoTab" onClick={this.toggleTodo}>To Do</a>
+              <div className="todo-items item-list-container" data-state-name="todo">
+                <a className="todo-tab" onClick={this.toggleTodo}>To Do</a>
                 <ItemList items={todoItems} state="todo" />
               </div>
-              <div className="inprogressItems itemListContainer" data-state-name="inprogress">
-                <a className="inprogressTab" onClick={this.toggleProgress}>In Progress</a>
+              <div className="inprogress-items item-list-container" data-state-name="inprogress">
+                <a className="inprogress-tab" onClick={this.toggleProgress}>In Progress</a>
                 <ItemList items={progressItems} state="inprogress" />
               </div>
-              <div className="completedItems itemListContainer" data-state-name="completed">
-                <a className="completedTab" onClick={this.toggleCompleted}>Completed</a>
+              <div className="completed-items item-list-container" data-state-name="completed">
+                <a className="completed-tab" onClick={this.toggleCompleted}>Completed</a>
                 <ItemList items={completedItems} state="completed" />
               </div>
             </div>
           </div>
-          <div className="newItem">
+          <div className="new-item">
             <form action={itemFormHref} method="post" onSubmit={this.saveItem}>
-              <div className="field">
-                <label htmlFor="title">Title</label><br />
+              <div className="field text-field">
+                <label htmlFor="title">Title</label>
                 <input type="text" id="title" onChange={this.handleChange("title")} />
               </div>
 
               <div className="field">
-                <label htmlFor="description">Description</label><br />
+                <label htmlFor="description">Description</label>
                 <textarea id="description" rows="4" onChange={this.handleChange("description")} />
               </div>
 
