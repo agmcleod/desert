@@ -40,7 +40,6 @@ var ProjectNew = React.createClass({
       this.transitionTo("/projects");
     }
     else {
-      ProjectStore.setErrors(null);
       this.setState({ title: this.state.title, description: this.state.description, errors: errors });
     }
   },

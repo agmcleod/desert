@@ -3,12 +3,11 @@ var EventEmitter = require("events").EventEmitter;
 var ProjectConstants = require("../constants/ProjectConstants");
 var merge = require("react/lib/merge");
 var Router = require('react-router');
+var ItemStore = require("./ItemStore");
 
 var _errors = null;
 var _projects = {};
-var _items = {};
 var _setId = null;
-var _setItemId = null;
 
 var CHANGE_EVENT = 'change';
 
@@ -17,14 +16,10 @@ var ProjectStore = merge(EventEmitter.prototype, {
     this.on(CHANGE_EVENT, callback);
   },
 
-  appendItem: function (item) {
-    _items[item.id] = item;
-    _setItemId = item.id;
-  },
-
   appendProject: function (project) {
     _projects[project.id] = project;
     _setId = project.id;
+    _errors = null;
   },
 
   emitChange: function () {
@@ -55,15 +50,11 @@ var ProjectStore = merge(EventEmitter.prototype, {
     return _setId;
   },
 
-  getSetItemId: function () {
-    return _setItemId;
-  },
-
   removeChangeListener: function(callback) {
     this.removeListener(CHANGE_EVENT, callback);
   },
 
-  setErrors: function (err) {
+  setErrors: function (errors) {
     _errors = errors;
   },
 
@@ -86,17 +77,16 @@ var ProjectStore = merge(EventEmitter.prototype, {
 
 AppDispatcher.register(function(payload) {
   var action = payload.action;
-
+  var emit = false;
   switch(action.actionType) {
-    case ProjectConstants.ITEM_CREATE:
-      ProjectStore.appendItem(action.item);
-      break;
     case ProjectConstants.PROJECT_CREATE:
       ProjectStore.appendProject(action.project);
+      emit = true;
       break;
 
     case ProjectConstants.PROJECT_CREATE_FAIL:
       ProjectStore.setErrors(action.errors);
+      emit = true;
       break;
 
     case ProjectConstants.PROJECT_LIST:
@@ -105,7 +95,8 @@ AppDispatcher.register(function(payload) {
 
     case ProjectConstants.PROJECT_SHOW:
       ProjectStore.appendProject(action.project);
-      ProjectStore.setItems(action.items);
+      ItemStore.setItems(action.items);
+      emit = true;
       break;
 
     case ProjectConstants.PROJECT_DESTROY:
@@ -124,11 +115,9 @@ AppDispatcher.register(function(payload) {
       return true;
   }
 
-  // This often goes in each case that should trigger a UI change. This store
-  // needs to trigger a UI change after every view action, so we can make the
-  // code less repetitive by putting it here.  We need the default case,
-  // however, to make sure this only gets called after one of the cases above.
-  ProjectStore.emitChange();
+  if (emit) {
+    ProjectStore.emitChange();
+  }
 
   return true; // No errors.  Needed by promise in Dispatcher.
 });

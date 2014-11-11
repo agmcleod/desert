@@ -5,7 +5,7 @@ class ItemsController < ApplicationController
 
     respond_to do |format|
       if @item.save
-        format.html
+        format.html { redirect_to @project }
         format.json { render json: @item }
       else
         format.html { render template: "projects/show" }
@@ -22,9 +22,22 @@ class ItemsController < ApplicationController
     end
   end
 
+  def update
+    @item = Item.find params[:id]
+    respond_to do |format|
+      if @item.update_attributes item_params
+        format.html { redirect_to @project }
+        format.json { render json: @item }
+      else
+        format.html { render template: "projects/show" }
+        format.json { render json: { errors: @item.errors }, status: 422 }
+      end
+    end
+  end
+
 private
 
   def item_params
-    params.require(:item).permit(:description, :project_id, :title)
+    params.require(:item).permit(:description, :project_id, :state, :title)
   end
 end

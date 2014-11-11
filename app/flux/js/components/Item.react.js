@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 var React = require('react');
 var ReactPropTypes = React.PropTypes;
+var ItemActions = require("../actions/ItemActions");
 
 var Item = React.createClass({
   addEvents: function() {
@@ -26,10 +27,9 @@ var Item = React.createClass({
       style: {
         top: 0,
         left: 0,
-        position: 'relative'
+        position: 'static'
       },
-      dragging: false,
-      rel: null // position relative to the cursor
+      dragging: false
     }
   },
 
@@ -39,6 +39,7 @@ var Item = React.createClass({
     if (e.button !== 0) {
       return;
     }
+    e.stopPropagation();
     this.addEvents();
     var pageOffset = $(this.getDOMNode()).offset();
     this.setState({
@@ -53,7 +54,21 @@ var Item = React.createClass({
   onMouseUp: function (e) {
     this.removeEvents();
     this.setState({dragging: false, style: this.getInitialState().style });
-    console.log('item mouseup');
+    var x = e.clientX + document.body.scrollLeft;
+    var y = e.clientY + document.body.scrollTop;
+
+    // TODO: Figure out a way without querying the DOM like this.
+    var stateName;
+    $('.itemListContainer[id!="'+ this.props.state +'Items"]').each(function () {
+      var rect = this.getBoundingClientRect();
+      if (x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom) {
+        stateName = $(this).data('state-name');
+      }
+    });
+    if (typeof stateName !== "string" || stateName === "") {
+      throw "bad state name: " + stateName;
+    }
+    ItemActions.moveItem(this.props.item.id, stateName);
   },
   onMouseMove: function (e) {
     if (!this.state.dragging) {
@@ -61,6 +76,7 @@ var Item = React.createClass({
     }
     var deltaX = e.pageX - this.state.originX;
     var deltaY = e.pageY - this.state.originY;
+
     this.setState({
       style: {
         position: 'absolute',

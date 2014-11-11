@@ -6,8 +6,22 @@ var React = require("react");
 var Item = require('./Item.react');
 
 var ItemList = React.createClass({
-  onMouseUp: function () {
-    console.log(this.props.state);
+  classes: function () {
+    return [this.props.state, this.state.hover ? "hover" : ""].join(' ');
+  },
+
+  getInitialState: function () {
+    return {
+      hover: false
+    };
+  },
+
+  onMouseEnter: function () {
+    this.setState({ hover: true });
+  },
+
+  onMouseLeave: function () {
+    this.setState({ hover: false });
   },
 
   render: function () {
@@ -15,10 +29,11 @@ var ItemList = React.createClass({
     var itemList = [];
     for (var i = 0; i < items.length; i++) {
       var item = items[i];
-      itemList.push(<Item item={item} key={item.id} parentObject={this} />);
+      itemList.push(<Item item={item} key={item.id} />);
     };
+
     return (
-      <ul onMouseUp={this.onMouseUp}>{itemList}</ul>
+      <ul className={this.classes()} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>{itemList}</ul>
     );
   }
 });

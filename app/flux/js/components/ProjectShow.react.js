@@ -2,7 +2,9 @@
 var React = require('react');
 
 var ProjectStore = require('../stores/ProjectStore');
+var ItemStore = require('../stores/ItemStore');
 var ProjectActions = require('../actions/ProjectActions');
+var ItemActions = require('../actions/ItemActions');
 var Project = require('./Project.react');
 var Loading = require('./Loading.react');
 var ItemList = require('./ItemList.react');
@@ -21,10 +23,12 @@ var ProjectShow = React.createClass({
     var id = this.props.params.id;
     ProjectActions.getProjectInformation(id);
     ProjectStore.addChangeListener(this._onChange);
+    ItemStore.addChangeListener(this._onChange);
   },
 
   componentWillUnmount: function () {
     ProjectStore.removeChangeListener(this._onChange);
+    ItemStore.removeChangeListener(this._onChange);
   },
 
   eachItem: function (fn) {
@@ -59,7 +63,7 @@ var ProjectShow = React.createClass({
   },
 
   _onChange: function () {
-    this.setState(getProjectShowState(ProjectStore.getSetId(), ProjectStore.getItems(), this.state));
+    this.setState(getProjectShowState(ProjectStore.getSetId(), ItemStore.getItems(), this.state));
     $('.newItem').hide();
   },
 
@@ -91,15 +95,15 @@ var ProjectShow = React.createClass({
           </p>
           <div className="items">
             <div className="itemlists">
-              <div className="todoItems">
+              <div className="todoItems itemListContainer" data-state-name="todo">
                 <a className="todoTab" onClick={this.toggleTodo}>To Do</a>
                 <ItemList items={todoItems} state="todo" />
               </div>
-              <div className="progressItems">
+              <div className="inprogressItems itemListContainer" data-state-name="inprogress">
                 <a className="inprogressTab" onClick={this.toggleProgress}>In Progress</a>
                 <ItemList items={progressItems} state="inprogress" />
               </div>
-              <div className="completedItems">
+              <div className="completedItems itemListContainer" data-state-name="completed">
                 <a className="completedTab" onClick={this.toggleCompleted}>Completed</a>
                 <ItemList items={completedItems} state="completed" />
               </div>
@@ -136,7 +140,7 @@ var ProjectShow = React.createClass({
 
   saveItem: function (e) {
     e.preventDefault();
-    ProjectActions.createItem(this.state);
+    ItemActions.createItem(this.state);
   },
 
   toggleCompleted: function () {
