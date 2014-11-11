@@ -18,7 +18,7 @@ function getProjectShowState (id, items, state)  {
 
 var ProjectShow = React.createClass({
   completedOnMouseUp: function () {
-
+    console.log("completed");
   },
   componentDidMount: function () {
     var id = this.props.params.id;
@@ -28,6 +28,15 @@ var ProjectShow = React.createClass({
 
   componentWillUnmount: function () {
     ProjectStore.removeChangeListener(this._onChange);
+  },
+
+  eachItem: function (fn) {
+    for (var id in this.state.items) {
+      if (this.state.items.hasOwnProperty(id)) {
+        var item = this.state.items[id];
+        fn(item, id);
+      }
+    }
   },
 
   getInitialState: function () {
@@ -58,7 +67,7 @@ var ProjectShow = React.createClass({
   },
 
   progressOnMouseUp: function () {
-    
+    console.log("progress");
   },
 
   render: function () {
@@ -68,20 +77,18 @@ var ProjectShow = React.createClass({
       var todoItems = [];
       var progressItems = [];
       var completedItems = [];
-      for (var id in this.state.items) {
-        if (this.state.items.hasOwnProperty(id)) {
-          var item = this.state.items[id];
-          if (item.state === "todo") {
-            todoItems.push(<Item item={item} key={id} />);
-          }
-          else if (item.state === "inprogress") {
-            progressItems.push(<Item item={item} key={id} />);
-          }
-          else if (item.state === "completed") {
-            completedItems.push(<Item item={item} key={id} />);
-          }
+      var _this = this;
+      this.eachItem(function (item, id) {
+        if (item.state === "todo") {
+          todoItems.push(<Item item={item} key={id} parentObject={_this} />);
         }
-      }
+        else if (item.state === "inprogress") {
+          progressItems.push(<Item item={item} key={id} parentObject={_this} />);
+        }
+        else if (item.state === "completed") {
+          completedItems.push(<Item item={item} key={id} parentObject={_this} />);
+        }
+      });
 
       return (
         <div className="project project-show items">
@@ -140,7 +147,7 @@ var ProjectShow = React.createClass({
   },
 
   todoOnMouseUp: function () {
-
+    console.log("todo");
   },
 
   toggleCompleted: function () {

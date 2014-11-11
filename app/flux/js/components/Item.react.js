@@ -3,6 +3,10 @@ var React = require('react');
 var ReactPropTypes = React.PropTypes;
 
 var Item = React.createClass({
+  addEvents: function() {
+    document.addEventListener('mousemove', this.onMouseMove);
+    return document.addEventListener('mouseup', this.onMouseUp);
+  },
   // we could get away with not having this (and just having the listeners on
   // our div), but then the experience would be possibly be janky. If there's
   // anything w/ a higher z-index that gets in the way, then you're toast,
@@ -35,6 +39,7 @@ var Item = React.createClass({
     if (e.button !== 0) {
       return;
     }
+    this.addEvents();
     var pageOffset = $(this.getDOMNode()).offset();
     this.setState({
       dragging: true,
@@ -44,13 +49,12 @@ var Item = React.createClass({
       elementY: pageOffset.top,
       width: $(this.getDOMNode()).width()
     });
-    e.stopPropagation()
-    e.preventDefault()
+    e.stopPropagation();
   },
   onMouseUp: function (e) {
+    this.removeEvents();
     this.setState({dragging: false, style: this.getInitialState().style });
-    e.stopPropagation()
-    e.preventDefault()
+    console.log('item mouseup');
   },
   onMouseMove: function (e) {
     if (!this.state.dragging) {
@@ -66,13 +70,17 @@ var Item = React.createClass({
         width: this.state.width
       }
     });
-    e.stopPropagation()
-    e.preventDefault()
   },
 
   propTypes: {
     item: ReactPropTypes.object.isRequired
   },
+
+  removeEvents: function() {
+    document.removeEventListener('mousemove', this.onMouseMove);
+    return document.removeEventListener('mouseup', this.onMouseUp);
+  },
+
   render: function () {
     var item = this.props.item;
     var className = "item " + (this.state.dragging ? "dragging" : "");
