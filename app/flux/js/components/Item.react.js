@@ -5,7 +5,7 @@ var ReactPropTypes = React.PropTypes;
 var Item = React.createClass({
   addEvents: function() {
     document.addEventListener('mousemove', this.onMouseMove);
-    return document.addEventListener('mouseup', this.onMouseUp);
+    document.addEventListener('mouseup', this.onMouseUp);
   },
   // we could get away with not having this (and just having the listeners on
   // our div), but then the experience would be possibly be janky. If there's
@@ -49,7 +49,6 @@ var Item = React.createClass({
       elementY: pageOffset.top,
       width: $(this.getDOMNode()).width()
     });
-    e.stopPropagation();
   },
   onMouseUp: function (e) {
     this.removeEvents();
@@ -78,7 +77,7 @@ var Item = React.createClass({
 
   removeEvents: function() {
     document.removeEventListener('mousemove', this.onMouseMove);
-    return document.removeEventListener('mouseup', this.onMouseUp);
+    document.removeEventListener('mouseup', this.onMouseUp);
   },
 
   render: function () {

@@ -5,7 +5,7 @@ var ProjectStore = require('../stores/ProjectStore');
 var ProjectActions = require('../actions/ProjectActions');
 var Project = require('./Project.react');
 var Loading = require('./Loading.react');
-var Item = require('./Item.react');
+var ItemList = require('./ItemList.react');
 
 function getProjectShowState (id, items, state)  {
   return {
@@ -17,9 +17,6 @@ function getProjectShowState (id, items, state)  {
 }
 
 var ProjectShow = React.createClass({
-  completedOnMouseUp: function () {
-    console.log("completed");
-  },
   componentDidMount: function () {
     var id = this.props.params.id;
     ProjectActions.getProjectInformation(id);
@@ -66,10 +63,6 @@ var ProjectShow = React.createClass({
     $('.newItem').hide();
   },
 
-  progressOnMouseUp: function () {
-    console.log("progress");
-  },
-
   render: function () {
     if (this.state.project !== null) {
       var itemFormHref = "/projects/" + this.state.project.id + "/items"; 
@@ -80,13 +73,13 @@ var ProjectShow = React.createClass({
       var _this = this;
       this.eachItem(function (item, id) {
         if (item.state === "todo") {
-          todoItems.push(<Item item={item} key={id} parentObject={_this} />);
+          todoItems.push(item);
         }
         else if (item.state === "inprogress") {
-          progressItems.push(<Item item={item} key={id} parentObject={_this} />);
+          progressItems.push(item);
         }
         else if (item.state === "completed") {
-          completedItems.push(<Item item={item} key={id} parentObject={_this} />);
+          completedItems.push(item);
         }
       });
 
@@ -100,15 +93,15 @@ var ProjectShow = React.createClass({
             <div className="itemlists">
               <div className="todoItems">
                 <a className="todoTab" onClick={this.toggleTodo}>To Do</a>
-                <ul onMouseUp={this.todoOnMouseUp}>{todoItems}</ul>
+                <ItemList items={todoItems} state="todo" />
               </div>
               <div className="progressItems">
                 <a className="inprogressTab" onClick={this.toggleProgress}>In Progress</a>
-                <ul onMouseUp={this.progressOnMouseUp}>{progressItems}</ul>
+                <ItemList items={progressItems} state="inprogress" />
               </div>
               <div className="completedItems">
                 <a className="completedTab" onClick={this.toggleCompleted}>Completed</a>
-                <ul onMouseUp={this.completedOnMouseUp}>{completedItems}</ul>
+                <ItemList items={completedItems} state="completed" />
               </div>
             </div>
           </div>
@@ -144,10 +137,6 @@ var ProjectShow = React.createClass({
   saveItem: function (e) {
     e.preventDefault();
     ProjectActions.createItem(this.state);
-  },
-
-  todoOnMouseUp: function () {
-    console.log("todo");
   },
 
   toggleCompleted: function () {
