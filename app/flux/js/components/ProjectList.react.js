@@ -9,8 +9,9 @@ var ProjectStore = require('../stores/ProjectStore');
 var Project = require("./Project.react");
 var ProjectActions = require("../actions/ProjectActions");
 
-function getProjectListState () {
+function getProjectListState (loading) {
   return {
+    loading: loading,
     projects: ProjectStore.getAll()
   };
 }
@@ -26,20 +27,25 @@ var ProjectList = React.createClass({
   },
 
   getInitialState: function () {
-    return getProjectListState();
+    return getProjectListState(false);
   },
 
   _onChange: function () {
-    this.setState(getProjectListState());
+    this.setState(getProjectListState(true));
   },
 
   render: function () {
-    var projects = ProjectStore.getAll();
-    var projectContainers = [];
-
-    for (var id in projects) {
-      if (projects.hasOwnProperty(id)) {
-        projectContainers.push(<Project project={projects[id]} />);
+    var projects = this.state.projects;
+    var projectContainers;
+    if (projects.length === 0 && this.state.loading) {
+      projectContainers = (<Loading />);
+    }
+    else {
+      projectContainers = [];
+      for (var id in projects) {
+        if (projects.hasOwnProperty(id)) {
+          projectContainers.push(<Project project={projects[id]} />);
+        }
       }
     }
 
