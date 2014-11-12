@@ -16,6 +16,16 @@ var ProjectActions = {
     });
   },
 
+  getProjectInformation: function (id) {
+    $.when($.get('/projects/' + id + '.json'), $.get('/projects/' + id + '/items.json')).done(function (projectData, itemsData) {
+      AppDispatcher.handleViewAction({
+        actionType: ProjectConstants.PROJECT_SHOW,
+        project: projectData[0],
+        items: itemsData[0]
+      });
+    });
+  },
+
   list: function () {
     $.get("/projects.json").done(function (data) {
       AppDispatcher.handleViewAction({
@@ -25,13 +35,9 @@ var ProjectActions = {
     });
   },
 
-  getProjectInformation: function (id) {
-    $.when($.get('/projects/' + id + '.json'), $.get('/projects/' + id + '/items.json')).done(function (projectData, itemsData) {
-      AppDispatcher.handleViewAction({
-        actionType: ProjectConstants.PROJECT_SHOW,
-        project: projectData[0],
-        items: itemsData[0]
-      });
+  newItem: function () {
+    AppDispatcher.handleViewAction({
+      actionType: ProjectConstants.NEW_ITEM
     });
   }
 };

@@ -14,7 +14,8 @@ function getProjectShowState (id, items, state)  {
     project: ProjectStore.findById(id),
     items: items,
     title: state.title,
-    description: state.description
+    description: state.description,
+    newItem: false
   };
 }
 
@@ -59,13 +60,12 @@ var ProjectShow = React.createClass({
 
   newItem: function (e) {
     e.preventDefault();
-    $('.new-item').show();
-    $('.new-item').css('left', $('.todo-items').offset().left);
+    this.setState({ newItem: true });
   },
 
   _onChange: function () {
     this.setState(getProjectShowState(ProjectStore.getSetId(), ItemStore.getItems(), this.state));
-    $('.newItem').hide();
+    this.setState({ newItem: false });
   },
 
   render: function () {
@@ -87,6 +87,30 @@ var ProjectShow = React.createClass({
           completedItems.push(item);
         }
       });
+
+      var newItem = null;
+      if (this.state.newItem) {
+        var style = { left: $('.todo-items').offset().left + "px" };
+        newItem = (
+          <div className="new-item" style={style}>
+            <form action={itemFormHref} method="post" onSubmit={this.saveItem}>
+              <div className="field text-field">
+                <label htmlFor="title">Title</label>
+                <input type="text" id="title" onChange={this.handleChange("title")} />
+              </div>
+
+              <div className="field">
+                <label htmlFor="description">Description</label>
+                <textarea id="description" rows="4" onChange={this.handleChange("description")} />
+              </div>
+
+              <div className="field field-submit">
+                <input type="submit" />
+              </div>
+            </form>
+          </div>
+        );
+      }
 
       return (
         <div className="project project-show items">
@@ -110,23 +134,7 @@ var ProjectShow = React.createClass({
               </div>
             </div>
           </div>
-          <div className="new-item">
-            <form action={itemFormHref} method="post" onSubmit={this.saveItem}>
-              <div className="field text-field">
-                <label htmlFor="title">Title</label>
-                <input type="text" id="title" onChange={this.handleChange("title")} />
-              </div>
-
-              <div className="field">
-                <label htmlFor="description">Description</label>
-                <textarea id="description" rows="4" onChange={this.handleChange("description")} />
-              </div>
-
-              <div className="field field-submit">
-                <input type="submit" />
-              </div>
-            </form>
-          </div>
+          {newItem}
         </div>
       );
     }

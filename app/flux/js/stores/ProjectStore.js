@@ -38,10 +38,6 @@ var ProjectStore = merge(EventEmitter.prototype, {
     return _projects;
   },
 
-  getItems: function () {
-    return _items;
-  },
-
   getErrors: function () {
     return _errors;
   },
