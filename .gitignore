@@ -1,4 +1,1 @@
-tmp/*
-app/flux/node_modules
-public/assets
-log/*
+node_modules
