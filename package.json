@@ -19,7 +19,7 @@
     "react-router": "~0.10.2"
   },
   "scripts": {
-    "start": "watchify -o ../assets/javascripts/bundle.js -v -d .",
+    "start": "watchify -o ../dune/app/assets/javascripts/bundle.js -v -d .",
     "build": "NODE_ENV=production browserify . | uglifyjs -cm > js/bundle.min.js",
     "test": "jest"
   },
