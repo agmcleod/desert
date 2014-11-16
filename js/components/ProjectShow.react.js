@@ -52,7 +52,7 @@ var ProjectShow = React.createClass({
   getInitialState: function () {
     return {
       title: "",
-      description: "",
+      description: null,
       project: null,
       items: [],
       editItem: null
@@ -70,6 +70,10 @@ var ProjectShow = React.createClass({
   newItem: function (e) {
     e.preventDefault();
     ItemActions.newItem();
+    this.setState({
+      title: null,
+      description: null
+    });
   },
 
   _onChange: function () {
@@ -78,12 +82,14 @@ var ProjectShow = React.createClass({
 
   render: function () {
     if (this.state.project !== null) {
-      var handler;
+      var handler, formTitle;
       if (ItemStore.getEditingItemId() === null) {
         handler = this.saveItem;
+        formTitle = "New Item";
       }
       else {
         handler = this.updateItem;
+        formTitle = "Editing Item";
       }
       var newItemHref = "/projects/" + this.state.project.id + "/items/new";
       var todoItems = [];
@@ -108,13 +114,12 @@ var ProjectShow = React.createClass({
         form = (
           <div className="new-item" style={style}>
             <form onSubmit={handler}>
+              <h3>{formTitle}</h3>
               <div className="field text-field">
-                <label htmlFor="title">Title</label>
-                <input type="text" id="title" onChange={this.handleChange("title")} value={this.state.title} />
+                <input type="text" id="title" onChange={this.handleChange("title")} placeholder="Title" value={this.state.title} />
               </div>
 
               <div className="field">
-                <label htmlFor="description">Description</label>
                 <textarea id="description" rows="4" onChange={this.handleChange("description")} value={this.state.description} />
               </div>
 
