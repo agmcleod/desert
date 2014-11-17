@@ -71,8 +71,8 @@ var ProjectShow = React.createClass({
     e.preventDefault();
     ItemActions.newItem();
     this.setState({
-      title: null,
-      description: null
+      title: "",
+      description: ""
     });
   },
 
