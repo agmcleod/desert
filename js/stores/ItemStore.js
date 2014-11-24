@@ -63,6 +63,10 @@ var ItemStore = merge(EventEmitter.prototype, {
 AppDispatcher.register(function (payload) {
   var action = payload.action;
   switch (action.actionType) {
+    case ItemConstants.CLOSE_FORM:
+      ItemStore.setEditingItemId(null);
+      ItemStore.setShowFormState(false);
+      break;
     case ItemConstants.ITEM_CREATE:
       ItemStore.setItem(action.item);
       ItemStore.setShowFormState(false);

@@ -2,6 +2,12 @@ var AppDispatcher = require("../dispatchers/AppDispatcher");
 var ItemConstants = require("../constants/ItemConstants");
 
 var ItemActions = {
+  closeForm: function () {
+    AppDispatcher.handleViewAction({
+      actionType: ItemConstants.CLOSE_FORM
+    });
+  },
+
   createItem: function (data) {
     var postData = { item: { title: data.title, description: data.description, project_id: data.project.id } };
     $.post("/projects/" + data.project.id + "/items.json", postData).done(function (itemResData) {
