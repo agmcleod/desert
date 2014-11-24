@@ -39,6 +39,15 @@ var ItemActions = {
     });
   },
 
+  removeItem: function (id) {
+    $.ajax({ url: "/items/" + id + ".json", type: "DELETE" }).done(function () {
+      AppDispatcher.handleViewAction({
+        actionType: ItemConstants.DELETE_ITEM,
+        id: id
+      });
+    });
+  },
+
   updateItem: function (item) {
     $.ajax({ url: "/items/" + item.id + ".json", data: { item: item }, type: "PUT" }).done(function (itemResData) {
       AppDispatcher.handleViewAction({

@@ -103,12 +103,18 @@ var Item = React.createClass({
     document.removeEventListener('mouseup', this.onMouseUp);
   },
 
+  removeItem: function (e) {
+    e.preventDefault();
+    ItemActions.removeItem(this.props.item.id);
+  },
+
   render: function () {
     var item = this.props.item;
     var className = "item " + (this.state.dragging ? "dragging" : "");
     return (
       <li className={className} onMouseDown={this.onMouseDown} style={this.state.style}>
         <a href="#" onClick={this.openEditDialogue}>{item.title}</a>
+        <a href="#" className="close-btn" onClick={this.removeItem}>x</a>
       </li>
     );
   }

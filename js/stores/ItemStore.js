@@ -43,6 +43,10 @@ var ItemStore = merge(EventEmitter.prototype, {
     this.removeListener(CHANGE_EVENT, callback);
   },
 
+  removeItem: function (id) {
+    delete _items[id];
+  },
+
   setShowFormState: function (state) {
     _showFormState = state;
   },
@@ -66,6 +70,9 @@ AppDispatcher.register(function (payload) {
     case ItemConstants.CLOSE_FORM:
       ItemStore.setEditingItemId(null);
       ItemStore.setShowFormState(false);
+      break;
+    case ItemConstants.DELETE_ITEM:
+      ItemStore.removeItem(action.id);
       break;
     case ItemConstants.ITEM_CREATE:
       ItemStore.setItem(action.item);
