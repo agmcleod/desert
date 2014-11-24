@@ -113,6 +113,7 @@ var ProjectShow = React.createClass({
         var style = { left: $('.todo-items').offset().left + "px" };
         form = (
           <div className="new-item" style={style}>
+            <a className="close-btn"><img src="/images/close.png" alt="Close" /></a>
             <form onSubmit={handler}>
               <h3>{formTitle}</h3>
               <div className="field text-field">
