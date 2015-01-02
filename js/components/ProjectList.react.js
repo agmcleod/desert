@@ -45,7 +45,7 @@ var ProjectList = React.createClass({
       projectContainers = [];
       for (var id in projects) {
         if (projects.hasOwnProperty(id)) {
-          projectContainers.push(<Project project={projects[id]} />);
+          projectContainers.push(<Project project={projects[id]} key={id} />);
         }
       }
     }

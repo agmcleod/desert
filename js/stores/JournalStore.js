@@ -14,6 +14,10 @@ var JournalStore = merge(EventEmitter.prototype, {
     this.on(CHANGE_EVENT, callback);
   },
 
+  appendEntry: function (entry) {
+    _entries[entry.id] = entry;
+  },
+
   emitChange: function () {
     this.emit(CHANGE_EVENT);
   },
@@ -38,6 +42,12 @@ var JournalStore = merge(EventEmitter.prototype, {
 AppDispatcher.register(function(payload) {
   var action = payload.action;
   switch(action.actionType) {
+    case JournalEntryConstants.ENTRY_CREATE:
+      JournalStore.appendEntry(action.entry);
+      break;
+    case JournalEntryConstants.ENTRY_CREATE_FAIL:
+      JournalStore.setErrors(action.errors);
+      break;
     case JournalEntryConstants.JOURNAL_LIST:
       JournalStore.setEntries(action.entries);
       break;

@@ -85,6 +85,9 @@ var JournalNew = React.createClass({
             <textarea id="markdown_content" value={this.state.markdown_content} rows="4" onChange={this.handleChange("markdown_content")} />
             <Error message={messages['markdown_content']} />
           </div>
+          <div className="field field-submit">
+            <input type="submit" />
+          </div>
         </form>
       </div>
     );
@@ -92,6 +95,7 @@ var JournalNew = React.createClass({
 
   saveEntry: function (e) {
     e.preventDefault();
+    JournalActions.createEntry(this.state);
   }
 });
 
