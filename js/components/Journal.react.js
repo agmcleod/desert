@@ -21,12 +21,15 @@ var Journal = React.createClass({
     JournalStore.addChangeListener(this._onChange);
   },
 
+  componentWillUnmount: function () {
+    JournalStore.removeChangeListener(this._onChange);
+  },
+
   getInitialState: function () {
     return getJournalState(true);
   },
 
   _onChange: function () {
-    console.log('change');
     this.setState(getJournalState(false));
   },
 
