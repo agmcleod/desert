@@ -5,6 +5,7 @@ var merge = require("react/lib/merge");
 var Router = require('react-router');
 
 var _entries = {};
+var _errors = null;
 
 var CHANGE_EVENT = 'change';
 
@@ -19,6 +20,10 @@ var JournalStore = merge(EventEmitter.prototype, {
 
   getAll: function () {
     return _entries;
+  },
+
+  getErrors: function () {
+    return _errors;
   },
 
   removeChangeListener: function(callback) {

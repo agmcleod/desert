@@ -19,6 +19,22 @@ var ProjectNew = React.createClass({
     ProjectStore.removeChangeListener(this._onChange);
   },
 
+  getErrorMessages: function () {
+    var messages = {};
+    if (this.state.errors !== null) {
+      var errors = this.state.errors;
+      if (errors.title) {
+        messages['title'] = errors.title.join(', ');
+      }
+
+      if (errors.description) {
+        messages['description'] = errors.description.join(', ');
+      }
+    }
+
+    return messages;
+  },
+
   getInitialState: function () {
     return {
       title: '',
@@ -46,21 +62,7 @@ var ProjectNew = React.createClass({
   },
 
   render: function () {
-    var messages = {};
-    if (this.state.errors !== null) {
-      var errors = this.state.errors;
-      if (errors.title) {
-        messages['title'] = errors.title.join(', ');
-      }
-
-      if (errors.description) {
-        messages['description'] = errors.description.join(', ');
-      }
-
-      if (errors.markdown_content) {
-        messages['markdown_content'] = errors.markdown_content.join(', ');
-      }
-    }
+    var messages = this.getErrorMessages();
     return (
       <div className="projects projects-new">
         <h1>New Project</h1>

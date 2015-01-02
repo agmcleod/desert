@@ -50,6 +50,7 @@ var Journal = React.createClass({
           <Link to="home">Home</Link>
           <span>Journal</span>
         </div>
+        <Link to="journal/new">New Entry</Link>
         <div>{entryContainer}</div>
       </div>
     );
