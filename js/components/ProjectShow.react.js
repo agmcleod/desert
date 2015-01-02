@@ -8,6 +8,7 @@ var ItemActions = require('../actions/ItemActions');
 var Project = require('./Project.react');
 var Loading = require('./Loading.react');
 var ItemList = require('./ItemList.react');
+var Link = require("react-router").Link;
 
 function getProjectShowState (id, items, state)  {
   var title, description;
@@ -138,6 +139,11 @@ var ProjectShow = React.createClass({
       return (
         <div className="project project-show items">
           <h1>{this.state.project.title}</h1>
+          <div className="breadcrumb">
+            <Link to="app">Home</Link>
+            <Link to="projects">Projects</Link>
+            <span>{this.state.project.title}</span>
+          </div>
           <p>
             <a href={newItemHref} onClick={this.newItem}>New Item</a>
           </p>

@@ -7,6 +7,7 @@ var Error = require('./Error.react');
 var ProjectActions = require('../actions/ProjectActions');
 var ProjectStore = require('../stores/ProjectStore');
 var Router = require("react-router");
+var Link = Router.Link;
 
 var ProjectNew = React.createClass({
   mixins: [Router.Navigation],
@@ -17,7 +18,7 @@ var ProjectNew = React.createClass({
   componentWillUnmount: function () {
     ProjectStore.removeChangeListener(this._onChange);
   },
-  
+
   getInitialState: function () {
     return {
       title: '',
@@ -63,6 +64,11 @@ var ProjectNew = React.createClass({
     return (
       <div className="projects projects-new">
         <h1>New Project</h1>
+        <div className="breadcrumb">
+          <Link to="app">Home</Link>
+          <Link to="projects">Projects</Link>
+          <span>New Project</span>
+        </div>
         <form action="/projects" method="post" onSubmit={this.saveProject}>
           <div className="field text-field">
             <label for="title">Title</label>
