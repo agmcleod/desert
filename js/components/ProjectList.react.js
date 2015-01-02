@@ -8,6 +8,7 @@ var ProjectNew = require('./ProjectNew.react');
 var ProjectStore = require('../stores/ProjectStore');
 var Project = require("./Project.react");
 var ProjectActions = require("../actions/ProjectActions");
+var Loading = require("./Loading.react.js");
 
 function getProjectListState (loading) {
   return {
@@ -27,17 +28,17 @@ var ProjectList = React.createClass({
   },
 
   getInitialState: function () {
-    return getProjectListState(false);
+    return getProjectListState(true);
   },
 
   _onChange: function () {
-    this.setState(getProjectListState(true));
+    this.setState(getProjectListState(false));
   },
 
   render: function () {
     var projects = this.state.projects;
     var projectContainers;
-    if (projects.length === 0 && this.state.loading) {
+    if (Object.keys(projects).length === 0 && this.state.loading) {
       projectContainers = (<Loading />);
     }
     else {
