@@ -11,7 +11,7 @@ var Entry = React.createClass({
     return (
       <div className="entry">
         <h3>{entry.title}</h3>
-        <div>{entry.content}</div>
+        <div dangerouslySetInnerHTML={{__html: entry.content}} />
       </div>
     );
   }
