@@ -16,6 +16,15 @@ var JournalActions = {
     });
   },
 
+  getEntryInformation: function (id) {
+    $.get('/journal/' + id + '.json').done(function (data) {
+      AppDispatcher.handleViewAction({
+        actionType: JournalEntryConstants.ENTRY_SHOW,
+        entry: data
+      });
+    })
+  },
+
   list: function () {
     $.get("/journal.json").done(function (data) {
       AppDispatcher.handleViewAction({

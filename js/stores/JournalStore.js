@@ -6,6 +6,7 @@ var Router = require('react-router');
 
 var _entries = {};
 var _errors = null;
+var _setId = null;
 
 var CHANGE_EVENT = 'change';
 
@@ -16,10 +17,15 @@ var JournalStore = merge(EventEmitter.prototype, {
 
   appendEntry: function (entry) {
     _entries[entry.id] = entry;
+    _setId = entry.id;
   },
 
   emitChange: function () {
     this.emit(CHANGE_EVENT);
+  },
+
+  findById: function (id) {
+    return _entries[id];
   },
 
   getAll: function () {
@@ -28,6 +34,10 @@ var JournalStore = merge(EventEmitter.prototype, {
 
   getErrors: function () {
     return _errors;
+  },
+
+  getSetId: function () {
+    return _setId;
   },
 
   removeChangeListener: function(callback) {
@@ -47,6 +57,9 @@ AppDispatcher.register(function(payload) {
       break;
     case JournalEntryConstants.ENTRY_CREATE_FAIL:
       JournalStore.setErrors(action.errors);
+      break;
+    case JournalEntryConstants.ENTRY_SHOW:
+      JournalStore.appendEntry(action.entry);
       break;
     case JournalEntryConstants.JOURNAL_LIST:
       JournalStore.setEntries(action.entries);

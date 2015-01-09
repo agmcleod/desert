@@ -10,7 +10,7 @@ var Entry = React.createClass({
     var entry = this.props.entry;
     return (
       <div className="entry">
-        <h2>{entry.title}</h2>
+        <h3><Link to="journalshow" params={{id: entry.id}}>{entry.title}</Link></h3>
         <div dangerouslySetInnerHTML={{__html: entry.content}} />
       </div>
     );

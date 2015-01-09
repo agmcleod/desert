@@ -13,6 +13,7 @@ var ProjectNew = require("./components/ProjectNew.react");
 var ProjectShow = require("./components/ProjectShow.react");
 var Journal = require("./components/Journal.react");
 var JournalNew = require("./components/JournalNew.react.js");
+var JournalShow = require("./components/JournalShow.react.js");
 
 var App = React.createClass({
   render: function () {
@@ -30,6 +31,7 @@ var routes = (
       <Route name="projects" handler={ProjectList} />
       <Route name="projects/new" handler={ProjectNew} />
       <Route name="journal" handler={Journal} />
+      <Route name="journalshow" path="/journal/:id" handler={JournalShow} />
       <Route name="journal/new" handler={JournalNew} />
       <Route name="home" handler={Home} />
       <Route name="projectshow" path="/projects/:id" handler={ProjectShow} />

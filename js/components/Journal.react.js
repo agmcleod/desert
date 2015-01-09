@@ -7,7 +7,7 @@ var Link = require("react-router").Link;
 var JournalStore = require("../stores/JournalStore");
 var JournalActions = require("../actions/JournalActions.js");
 var Loading = require("./Loading.react.js");
-var Entry = require("./Entry.react.js");
+var EntryShort = require("./EntryShort.react.js");
 
 function getJournalState (loading) {
   return {
@@ -45,7 +45,7 @@ var Journal = React.createClass({
       for (var id in entries) {
         if (entries.hasOwnProperty(id)) {
           var entry = entries[id];
-          entryContainer.push(<Entry entry={entry} key={id} />);
+          entryContainer.push(<EntryShort entry={entry} key={id} />);
         }
       }
     }
