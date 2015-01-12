@@ -35,8 +35,10 @@ var JournalShow = React.createClass({
 
   render: function () {
     var content;
+    var entryTitle;
     if (this.state.entry) {
       content = <Entry entry={this.state.entry} />;
+      entryTitle = this.state.entry.title;
     }
     else {
       content = <Loading />;
@@ -47,6 +49,7 @@ var JournalShow = React.createClass({
         <div className="breadcrumb">
           <Link to="home">Home</Link>
           <Link to="journal">Journal</Link>
+          <span>{entryTitle}</span>
         </div>
         {content}
       </div>
