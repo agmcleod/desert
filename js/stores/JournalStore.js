@@ -61,9 +61,16 @@ AppDispatcher.register(function(payload) {
     case JournalEntryConstants.ENTRY_SHOW:
       JournalStore.appendEntry(action.entry);
       break;
+    case JournalEntryConstants.ENTRY_UPDATE:
+      JournalStore.appendEntry(action.entry);
+      break;
+    case JournalEntryConstants.ENTRY_UPDATE_FAIL:
+      JournalStore.setErrors(action.errors);
+      break;
     case JournalEntryConstants.JOURNAL_LIST:
       JournalStore.setEntries(action.entries);
       break;
+
 
     default:
       return true;

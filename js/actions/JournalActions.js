@@ -32,6 +32,25 @@ var JournalActions = {
         entries: data
       });
     });
+  },
+
+  updateEntry: function (data) {
+    $.ajax({
+      url: "/journal/" + data.id + ".json",
+      data: { entry: { title: data.title, markdown_content: data.markdown_content } },
+      type: "PUT"
+    }).done(function (data) {
+      data.updated = true;
+      AppDispatcher.handleViewAction({
+        actionType: JournalEntryConstants.ENTRY_UPDATE,
+        entry: data
+      });
+    }).fail(function (jqXHR) {
+      AppDispatcher.handleViewAction({
+        actionType: JournalEntryConstants.ENTRY_UPDATE_FAIL,
+        errors: jqXHR.responseJSON.errors
+      });
+    });
   }
 }
 

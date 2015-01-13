@@ -32,9 +32,9 @@ var routes = (
       <Route name="projects" handler={ProjectList} />
       <Route name="projects/new" handler={ProjectNew} />
       <Route name="journal" handler={JournalList} />
-      <Route name="journalshow" path="/journal/:id" handler={JournalShow} />
       <Route name="journal/new" handler={JournalNew} />
       <Route name="journaledit" path="/journal/:id/edit" handler={JournalEdit} />
+      <Route name="journalshow" path="/journal/:id" handler={JournalShow} />
       <Route name="home" handler={Home} />
       <Route name="projectshow" path="/projects/:id" handler={ProjectShow} />
       <DefaultRoute handler={Home} />

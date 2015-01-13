@@ -34,11 +34,11 @@ var JournalShow = React.createClass({
   },
 
   render: function () {
-    var content;
-    var entryTitle;
+    var content, entryTitle, editLink;
     if (this.state.entry) {
       content = <Entry entry={this.state.entry} />;
       entryTitle = this.state.entry.title;
+      editLink = <p><Link to="journaledit" params={{id: this.state.entry.id}}>Edit</Link></p>;
     }
     else {
       content = <Loading />;
@@ -51,6 +51,7 @@ var JournalShow = React.createClass({
           <Link to="journal">Journal</Link>
           <span>{entryTitle}</span>
         </div>
+        {editLink}
         {content}
       </div>
     );

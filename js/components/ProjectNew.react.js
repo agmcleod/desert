@@ -73,12 +73,12 @@ var ProjectNew = React.createClass({
         </div>
         <form action="/projects" method="post" onSubmit={this.saveProject}>
           <div className="field text-field">
-            <label for="title">Title</label>
+            <label htmlFor="title">Title</label>
             <input className="textField" type="text" name="title" id="title" onChange={this.handleChange("title")} value={this.state.title} />
             <Error message={messages['title']} />
           </div>
           <div className="field">
-            <label for="description">Description</label>
+            <label htmlFor="description">Description</label>
             <textarea id="description" value={this.state.description} rows="4" onChange={this.handleChange("description")} />
             <Error message={messages['description']} />
           </div>

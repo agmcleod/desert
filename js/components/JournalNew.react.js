@@ -5,11 +5,13 @@
 var React = require("react");
 var Router = require("react-router");
 var Link = Router.Link;
+var JournalActions = require("../actions/JournalActions");
+var JournalFormMixin = require("../mixins/JournalFormMixin");
 var JournalStore = require("../stores/JournalStore");
-var JournalActions = require("../actions/JournalActions.js");
 
 var JournalNew = React.createClass({
-  mixins: [Router.Navigation],
+  mixins: [JournalFormMixin, Router.Navigation],
+
   componentDidMount: function () {
     JournalStore.addChangeListener(this._onChange);
   },
@@ -17,37 +19,12 @@ var JournalNew = React.createClass({
   componentWillUnmount: function () {
     JournalStore.removeChangeListener(this._onChange);
   },
-
-  getErrorMessages: function () {
-    var messages = {};
-    if (this.state.errors !== null) {
-      var errors = this.state.errors;
-      if (errors.title) {
-        messages['title'] = errors.title.join(', ');
-      }
-
-      if (errors.markdown_content) {
-        messages['markdown_content'] = errors.markdown_content.join(', ');
-      }
-    }
-
-    return messages;
-  },
-
   getInitialState: function () {
     return {
       title: '',
       markdown_content: '',
       errors: null
     };
-  },
-
-  handleChange: function (key) {
-    return function (e) {
-      var state = {};
-      state[key] = e.target.value;
-      this.setState(state);
-    }.bind(this);
   },
 
   _onChange: function () {
@@ -65,7 +42,7 @@ var JournalNew = React.createClass({
   },
 
   render: function () {
-    var messages = this.getErrorMessages();
+    var messages = this.getErrorMessages(this.state);
     return (
       <div className="journal journal-new">
         <h1>New Journal Entry</h1>
@@ -77,12 +54,12 @@ var JournalNew = React.createClass({
         <form action="/journal" method="post" onSubmit={this.saveEntry}>
           <div className="field text-field">
             <label for="title">Title</label>
-            <input className="textField" type="text" name="title" onChange={this.handleChange("title")} value={this.state.title} />
+            <input className="textField" type="text" name="title" onChange={this.handleChange.call(this, "title")} value={this.state.title} />
             <Error message={messages['title']} />
           </div>
           <div className="field">
             <label for="markdown_content">Content</label>
-            <textarea id="markdown_content" value={this.state.markdown_content} rows="4" onChange={this.handleChange("markdown_content")} />
+            <textarea id="markdown_content" value={this.state.markdown_content} rows="4" onChange={this.handleChange.call(this, "markdown_content")} />
             <Error message={messages['markdown_content']} />
           </div>
           <div className="field field-submit">
