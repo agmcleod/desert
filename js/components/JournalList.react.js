@@ -16,7 +16,7 @@ function getJournalState (loading) {
   };
 }
 
-var Journal = React.createClass({
+var JournalList = React.createClass({
   componentDidMount: function () {
     JournalActions.list();
     JournalStore.addChangeListener(this._onChange);
@@ -64,4 +64,4 @@ var Journal = React.createClass({
   }
 });
 
-module.exports = Journal;
+module.exports = JournalList;
