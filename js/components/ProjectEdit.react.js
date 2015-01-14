@@ -19,10 +19,10 @@ function getProjectEditState (id, errors) {
 }
 
 var ProjectEdit = React.createClass({
-  mixins: [ProjectFormMixin, Router.Navigation],
+  mixins: [ProjectFormMixin, Router.Navigation, Router.State],
   componentDidMount: function () {
     ProjectStore.addChangeListener(this._onChange);
-    var id = this.props.params.id;
+    var id = this.getParams().id;
     ProjectActions.getProjectInformation(id);
   },
 

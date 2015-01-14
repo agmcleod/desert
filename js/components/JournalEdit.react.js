@@ -18,10 +18,10 @@ function getJournalEditState (id, errors) {
 }
 
 var JournalEdit = React.createClass({
-  mixins: [JournalFormMixin, Router.Navigation],
+  mixins: [JournalFormMixin, Router.Navigation, Router.State],
   componentDidMount: function () {
     JournalStore.addChangeListener(this._onChange);
-    var id = this.props.params.id;
+    var id = this.getParams().id;
     JournalActions.getEntryInformation(id);
   },
 

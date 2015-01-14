@@ -4,7 +4,8 @@ var Entry = require('./Entry.react.js');
 var JournalActions = require('../actions/JournalActions.js');
 var JournalStore = require('../stores/JournalStore.js');
 var Loading = require('./Loading.react.js');
-var Link = require('react-router').Link;
+var Router = require("react-router");
+var Link = Router.Link;
 
 function getJournalShowState (id) {
   return {
@@ -13,8 +14,9 @@ function getJournalShowState (id) {
 }
 
 var JournalShow = React.createClass({
+  mixins: [ Router.State ],
   componentDidMount: function () {
-    var id = this.props.params.id;
+    var id = this.getParams().id;
     JournalActions.getEntryInformation(id);
     JournalStore.addChangeListener(this._onChange);
   },

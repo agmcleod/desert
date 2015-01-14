@@ -8,7 +8,8 @@ var ItemActions = require('../actions/ItemActions');
 var Project = require('./Project.react');
 var Loading = require('./Loading.react');
 var ItemList = require('./ItemList.react');
-var Link = require("react-router").Link;
+var Router = require("react-router");
+var Link = Router.Link;
 
 function getProjectShowState (id, items, state)  {
   var title, description;
@@ -29,11 +30,12 @@ function getProjectShowState (id, items, state)  {
 }
 
 var ProjectShow = React.createClass({
+  mixins: [ Router.State ],
   closeForm: function () {
     ItemActions.closeForm();
   },
   componentDidMount: function () {
-    var id = this.props.params.id;
+    var id = this.getParams().id;
     ProjectActions.getProjectInformation(id);
     ProjectStore.addChangeListener(this._onChange);
     ItemStore.addChangeListener(this._onChange);
