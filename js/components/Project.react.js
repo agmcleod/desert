@@ -13,6 +13,7 @@ var Project = React.createClass({
     return (
       <div className="project">
         <h2><Link to="projectshow" params={project}>{project.title}</Link></h2>
+        <Link to="projectedit" params={project} className="edit">Edit</Link>
         <p>{project.description}</p>
       </div>
     );

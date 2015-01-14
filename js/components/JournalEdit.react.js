@@ -31,7 +31,10 @@ var JournalEdit = React.createClass({
 
   getInitialState: function () {
     return {
-      entry: null,
+      id: null,
+      title: null,
+      markdown_content: null,
+      updated: false,
       errors: null
     };
   },

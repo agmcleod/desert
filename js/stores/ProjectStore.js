@@ -100,7 +100,10 @@ AppDispatcher.register(function(payload) {
       break;
 
     case ProjectConstants.PROJECT_UPDATE:
-
+      ProjectStore.appendProject(action.project);
+      break;
+    case ProjectConstants.PROJECT_UPDATE_FAIL:
+      ProjectStore.setErrors(action.errors);
       break;
 
     default:

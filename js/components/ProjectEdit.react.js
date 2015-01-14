@@ -1,19 +1,29 @@
-/**
- * @jsx React.DOM
- */
+var React = require("react");
 
-var React = require('react');
-var Error = require('./Error.react');
-var ProjectActions = require('../actions/ProjectActions');
 var ProjectStore = require('../stores/ProjectStore');
-var ProjectFormMixin = require("../mixins/ProjectFormMixin");
+var ProjectActions = require('../actions/ProjectActions');
+var Loading = require("./Loading.react");
 var Router = require("react-router");
 var Link = Router.Link;
+var ProjectFormMixin = require("../mixins/ProjectFormMixin");
 
-var ProjectNew = React.createClass({
+function getProjectEditState (id, errors) {
+  var project = ProjectStore.findById(id);
+  return {
+    id: project.id,
+    title: project.title,
+    description: project.description,
+    errors: errors,
+    updated: project.updated
+  };
+}
+
+var ProjectEdit = React.createClass({
   mixins: [ProjectFormMixin, Router.Navigation],
   componentDidMount: function () {
     ProjectStore.addChangeListener(this._onChange);
+    var id = this.props.params.id;
+    ProjectActions.getProjectInformation(id);
   },
 
   componentWillUnmount: function () {
@@ -38,11 +48,9 @@ var ProjectNew = React.createClass({
 
   _onChange: function () {
     var errors = ProjectStore.getErrors();
-    if (errors === null) {
+    this.setState(getProjectEditState(ProjectStore.getSetId(), errors));
+    if (errors === null && this.state.updated) {
       this.transitionTo("/projects");
-    }
-    else {
-      this.setState({ title: this.state.title, description: this.state.description, errors: errors });
     }
   },
 
@@ -50,13 +58,13 @@ var ProjectNew = React.createClass({
     var messages = this.getErrorMessages(this.state);
     return (
       <div className="projects projects-new">
-        <h1>New Project</h1>
+        <h1>Edit Project</h1>
         <div className="breadcrumb">
           <Link to="app">Home</Link>
           <Link to="projects">Projects</Link>
-          <span>New Project</span>
+          <span>Edit</span>
         </div>
-        <form action="/projects" method="post" onSubmit={this.saveProject}>
+        <form action="/projects" method="post" onSubmit={this.updateProject}>
           <div className="field text-field">
             <label htmlFor="title">Title</label>
             <input className="textField" type="text" name="title" id="title" onChange={this.handleChange("title")} value={this.state.title} />
@@ -75,10 +83,10 @@ var ProjectNew = React.createClass({
     );
   },
 
-  saveProject: function (e) {
+  updateProject: function (e) {
     e.preventDefault();
-    ProjectActions.createProject(this.state);
+    ProjectActions.updateProject(this.state);
   }
 });
 
-module.exports = ProjectNew;
+module.exports = ProjectEdit;

@@ -35,9 +35,22 @@ var ProjectActions = {
     });
   },
 
-  newItem: function () {
-    AppDispatcher.handleViewAction({
-      actionType: ProjectConstants.NEW_ITEM
+  updateProject: function (data) {
+    $.ajax({
+      url: "/projects/" + data.id + ".json",
+      data: { project: { title: data.title, description: data.description } },
+      type: "PUT"
+    }).done(function (data) {
+      data.updated = true;
+      AppDispatcher.handleViewAction({
+        actionType: ProjectConstants.PROJECT_UPDATE,
+        project: data
+      });
+    }).fail(function (jqXHR) {
+      AppDispatcher.handleViewAction({
+        actionType: ProjectConstants.PROJECT_UPDATE_FAIL,
+        errors: jqXHR.responseJSON.errors
+      });
     });
   }
 };
