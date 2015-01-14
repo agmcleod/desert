@@ -146,7 +146,7 @@ var ProjectShow = React.createClass({
             <Link to="projects">Projects</Link>
             <span>{this.state.project.title}</span>
           </div>
-          <p>
+          <p className="action-btn">
             <a href={newItemHref} onClick={this.newItem}>New Item</a>
           </p>
           <div className="items">

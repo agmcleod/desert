@@ -40,7 +40,7 @@ var JournalShow = React.createClass({
     if (this.state.entry) {
       content = <Entry entry={this.state.entry} />;
       entryTitle = this.state.entry.title;
-      editLink = <p><Link to="journaledit" params={{id: this.state.entry.id}}>Edit</Link></p>;
+      editLink = <p className="action-btn"><Link to="journaledit" params={{id: this.state.entry.id}}>Edit</Link></p>;
     }
     else {
       content = <Loading />;

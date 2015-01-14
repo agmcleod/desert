@@ -57,8 +57,8 @@ var JournalList = React.createClass({
           <Link to="home">Home</Link>
           <span>Journal</span>
         </div>
-        <Link to="journal/new">New Entry</Link>
-        <div>{entryContainer}</div>
+        <p className="action-btn"><Link to="journal/new">New Entry</Link></p>
+        <div className="entries">{entryContainer}</div>
       </div>
     );
   }
