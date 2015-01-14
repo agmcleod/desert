@@ -152,15 +152,15 @@ var ProjectShow = React.createClass({
           <div className="items">
             <div className="itemlists">
               <div className="todo-items item-list-container" data-state-name="todo">
-                <a className="todo-tab tab" onClick={this.toggleTodo}>To Do</a>
+                <a className="todo-tab tab" data-state-name="todo" onClick={this.toggleTodo}>To Do</a>
                 <ItemList items={todoItems} state="todo" />
               </div>
               <div className="inprogress-items item-list-container" data-state-name="inprogress">
-                <a className="inprogress-tab tab" onClick={this.toggleProgress}>In Progress</a>
+                <a className="inprogress-tab tab" data-state-name="inprogress" onClick={this.toggleProgress}>In Progress</a>
                 <ItemList items={progressItems} state="inprogress" />
               </div>
               <div className="completed-items item-list-container" data-state-name="completed">
-                <a className="completed-tab tab" onClick={this.toggleCompleted}>Completed</a>
+                <a className="completed-tab tab" data-state-name="inprogress" onClick={this.toggleCompleted}>Completed</a>
                 <ItemList items={completedItems} state="completed" />
               </div>
             </div>
