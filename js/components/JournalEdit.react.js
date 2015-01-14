@@ -25,6 +25,10 @@ var JournalEdit = React.createClass({
     JournalActions.getEntryInformation(id);
   },
 
+  componentDidUpdate: function(prevProps, prevState) {
+
+  },
+
   componentWillUnmount: function () {
     JournalStore.removeChangeListener(this._onChange);
   },
