@@ -19,14 +19,11 @@ function getJournalEditState (id, errors) {
 
 var JournalEdit = React.createClass({
   mixins: [JournalFormMixin, Router.Navigation, Router.State],
+
   componentDidMount: function () {
     JournalStore.addChangeListener(this._onChange);
     var id = this.getParams().id;
     JournalActions.getEntryInformation(id);
-  },
-
-  componentDidUpdate: function(prevProps, prevState) {
-
   },
 
   componentWillUnmount: function () {
@@ -68,7 +65,7 @@ var JournalEdit = React.createClass({
             <Error message={messages['title']} />
           </div>
           <div className="field">
-            <label for="markdown_content">Content</label>
+            <label for="markdown_content">Markdown Content</label>
             <textarea id="markdown_content" value={this.state.markdown_content} rows="4" onChange={this.handleChange.call(this, "markdown_content")} />
             <Error message={messages['markdown_content']} />
           </div>

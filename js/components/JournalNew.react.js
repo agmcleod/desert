@@ -58,7 +58,7 @@ var JournalNew = React.createClass({
             <Error message={messages['title']} />
           </div>
           <div className="field">
-            <label for="markdown_content">Content</label>
+            <label for="markdown_content">Markdown Content</label>
             <textarea id="markdown_content" value={this.state.markdown_content} rows="4" onChange={this.handleChange.call(this, "markdown_content")} />
             <Error message={messages['markdown_content']} />
           </div>
