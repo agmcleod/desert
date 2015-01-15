@@ -27,8 +27,23 @@ var ItemStore = merge(EventEmitter.prototype, {
     return _items[id];
   },
 
-  getItems: function () {
-    return _items;
+  getItems: function (project_id) {
+    if (project_id) {
+      var items = {};
+      for (var id in _items) {
+        if (_items.hasOwnProperty(id)) {
+          var item = _items[id];
+          if (item.project_id === project_id) {
+            items[item.id] = item;
+          }
+        }
+      }
+
+      return items;
+    }
+    else {
+      return _items;
+    }
   },
 
   getEditingItemId: function () {

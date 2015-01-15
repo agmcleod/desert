@@ -27,7 +27,16 @@ var JournalList = React.createClass({
   },
 
   getInitialState: function () {
-    return getJournalState(true);
+    var entries = JournalStore.getAll();
+    if (Object.keys(entries).length === 0) {
+      return getJournalState(true);
+    }
+    else {
+      return {
+        loading: false,
+        entries: entries
+      };
+    }
   },
 
   _onChange: function () {

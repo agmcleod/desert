@@ -28,7 +28,16 @@ var ProjectList = React.createClass({
   },
 
   getInitialState: function () {
-    return getProjectListState(true);
+    var projects = ProjectStore.getAll();
+    if (Object.keys(projects).length === 0) {
+      return getProjectListState(true);
+    }
+    else {
+      return {
+        loading: false,
+        projects: projects
+      };
+    }
   },
 
   _onChange: function () {

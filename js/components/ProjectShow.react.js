@@ -47,8 +47,6 @@ var ProjectShow = React.createClass({
       maxheight = Math.max(maxheight, $(this).height());
     });
 
-    console.log(maxheight);
-
     $('.itemlists div').css('height', maxheight + 'px');
   },
 
@@ -67,14 +65,28 @@ var ProjectShow = React.createClass({
   },
 
   getInitialState: function () {
-    return {
-      title: "",
-      description: null,
-      project: null,
-      items: [],
-      editItem: null,
-      focusTodo: true
-    };
+    var project = ProjectStore.findById(this.getParams().id);
+    if (project) {
+      var items = ItemStore.getItems(project.id);
+      return {
+        title: project.title,
+        description: project.description,
+        project: project
+        items: items,
+        editItem: false,
+        focusTodo: true
+      };
+    }
+    else {
+      return {
+        title: "",
+        description: null,
+        project: null,
+        items: [],
+        editItem: null,
+        focusTodo: true
+      };
+    }
   },
 
   handleChange: function (key) {
