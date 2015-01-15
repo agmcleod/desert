@@ -31,13 +31,23 @@ var JournalEdit = React.createClass({
   },
 
   getInitialState: function () {
-    return {
-      id: null,
-      title: null,
-      markdown_content: null,
+    var entry = JournalStore.findById(this.getParams().id);
+    var state = {
       updated: false,
       errors: null
     };
+    if (entry) {
+      state.id = entry.id;
+      state.title = entry.title;
+      state.markdown_content = entry.markdown_content;
+    }
+    else {
+      state.id = null;
+      state.title = null;
+      state.markdown_content = null;
+    }
+
+    return state;
   },
 
   _onChange: function () {
@@ -60,12 +70,12 @@ var JournalEdit = React.createClass({
         </div>
         <form action="/journal" method="post" onSubmit={this.updateEntry}>
           <div className="field text-field">
-            <label for="title">Title</label>
+            <label htmlFor="title">Title</label>
             <input className="textField" type="text" name="title" onChange={this.handleChange.call(this, "title")} value={this.state.title} />
             <Error message={messages['title']} />
           </div>
           <div className="field">
-            <label for="markdown_content">Markdown Content</label>
+            <label htmlFor="markdown_content">Markdown Content</label>
             <textarea id="markdown_content" value={this.state.markdown_content} rows="4" onChange={this.handleChange.call(this, "markdown_content")} />
             <Error message={messages['markdown_content']} />
           </div>

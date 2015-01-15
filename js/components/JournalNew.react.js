@@ -53,12 +53,12 @@ var JournalNew = React.createClass({
         </div>
         <form action="/journal" method="post" onSubmit={this.saveEntry}>
           <div className="field text-field">
-            <label for="title">Title</label>
+            <label htmlFor="title">Title</label>
             <input className="textField" type="text" name="title" onChange={this.handleChange.call(this, "title")} value={this.state.title} />
             <Error message={messages['title']} />
           </div>
           <div className="field">
-            <label for="markdown_content">Markdown Content</label>
+            <label htmlFor="markdown_content">Markdown Content</label>
             <textarea id="markdown_content" value={this.state.markdown_content} rows="4" onChange={this.handleChange.call(this, "markdown_content")} />
             <Error message={messages['markdown_content']} />
           </div>

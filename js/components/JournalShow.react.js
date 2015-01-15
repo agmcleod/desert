@@ -26,8 +26,9 @@ var JournalShow = React.createClass({
   },
 
   getInitialState: function () {
+    var entry = JournalStore.findById(this.getParams().id);
     return {
-      entry: null
+      entry: entry || null
     };
   },
 
