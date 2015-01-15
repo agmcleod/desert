@@ -199,7 +199,7 @@ var ProjectShow = React.createClass({
 
   toggleCompleted: function () {
     this.setState({
-      focusTodo: true,
+      focusTodo: false,
       focusInprogress: false,
       focusCompleted: true
     });
