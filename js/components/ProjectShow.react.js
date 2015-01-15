@@ -41,6 +41,17 @@ var ProjectShow = React.createClass({
     ItemStore.addChangeListener(this._onChange);
   },
 
+  componentDidUpdate: function () {
+    var maxheight = 0;
+    $('.itemlists div').each(function () {
+      maxheight = Math.max(maxheight, $(this).height());
+    });
+
+    console.log(maxheight);
+
+    $('.itemlists div').css('height', maxheight + 'px');
+  },
+
   componentWillUnmount: function () {
     ProjectStore.removeChangeListener(this._onChange);
     ItemStore.removeChangeListener(this._onChange);
@@ -61,7 +72,8 @@ var ProjectShow = React.createClass({
       description: null,
       project: null,
       items: [],
-      editItem: null
+      editItem: null,
+      focusTodo: true
     };
   },
 
@@ -150,17 +162,19 @@ var ProjectShow = React.createClass({
             <a href={newItemHref} onClick={this.newItem}>New Item</a>
           </p>
           <div className="items">
+            <div className="tabs">
+              <a className={"todo-tab tab" + (this.state.focusTodo ? ' focused' : '')} data-state-name="todo" onClick={this.toggleTodo}>To Do</a>
+              <a className={"inprogress-tab tab" + (this.state.focusInprogress ? ' focused' : '')} data-state-name="inprogress" onClick={this.toggleProgress}>In Progress</a>
+              <a className={"completed-tab tab" + (this.state.focusCompleted ? ' focused' : '')} data-state-name="inprogress" onClick={this.toggleCompleted}>Completed</a>
+            </div>
             <div className="itemlists">
-              <div className="todo-items item-list-container" data-state-name="todo">
-                <a className="todo-tab tab" data-state-name="todo" onClick={this.toggleTodo}>To Do</a>
+              <div className={"todo-items item-list-container" + (this.state.focusTodo ? ' highz' : '')} data-state-name="todo">
                 <ItemList items={todoItems} state="todo" />
               </div>
-              <div className="inprogress-items item-list-container" data-state-name="inprogress">
-                <a className="inprogress-tab tab" data-state-name="inprogress" onClick={this.toggleProgress}>In Progress</a>
+              <div className={"inprogress-items item-list-container" + (this.state.focusInprogress ? ' highz' : '')} data-state-name="inprogress">
                 <ItemList items={progressItems} state="inprogress" />
               </div>
-              <div className="completed-items item-list-container" data-state-name="completed">
-                <a className="completed-tab tab" data-state-name="inprogress" onClick={this.toggleCompleted}>Completed</a>
+              <div className={"completed-items item-list-container" + (this.state.focusCompleted ? ' highz' : '')} data-state-name="completed">
                 <ItemList items={completedItems} state="completed" />
               </div>
             </div>
@@ -184,15 +198,27 @@ var ProjectShow = React.createClass({
   },
 
   toggleCompleted: function () {
-
+    this.setState({
+      focusTodo: true,
+      focusInprogress: false,
+      focusCompleted: true
+    });
   },
 
   toggleProgress: function () {
-
+    this.setState({
+      focusTodo: false,
+      focusInprogress: true,
+      focusCompleted: false
+    });
   },
 
   toggleTodo: function () {
-
+    this.setState({
+      focusTodo: true,
+      focusInprogress: false,
+      focusCompleted: false
+    });
   },
 
   updateItem: function (e) {
