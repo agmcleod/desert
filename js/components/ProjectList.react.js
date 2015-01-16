@@ -62,7 +62,7 @@ var ProjectList = React.createClass({
     return (
       <div className="projects">
         <h1>Projects</h1>
-        <div className="breadcrumb"><Link to="app">Home</Link><span>Projects</span></div>
+        <div className="breadcrumb"><span>Projects</span></div>
         <p className="action-btn"><Link to="projects/new">Start New Project</Link></p>
         <div className="projectslist">{projectContainers}</div>
       </div>

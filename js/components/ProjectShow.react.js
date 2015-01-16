@@ -166,7 +166,6 @@ var ProjectShow = React.createClass({
         <div className="projects project-show items">
           <h1>{this.state.project.title}</h1>
           <div className="breadcrumb">
-            <Link to="app">Home</Link>
             <Link to="projects">Projects</Link>
             <span>{this.state.project.title}</span>
           </div>
