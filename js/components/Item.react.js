@@ -41,7 +41,14 @@ var Item = React.createClass({
     }
     e.stopPropagation();
     this.addEvents();
-    var pageOffset = $(this.getDOMNode()).offset();
+    var pageOffset;
+    var el = $(this.getDOMNode());
+    if (el.parents('.item-list-container').css('position') === 'absolute') {
+      pageOffset = { left: 0, top: 0 };
+    }
+    else {
+      pageOffset = el.offset();
+    }
     this.setState({
       dragging: true,
       originX: e.pageX,

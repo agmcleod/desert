@@ -71,7 +71,7 @@ var ProjectShow = React.createClass({
       return {
         title: project.title,
         description: project.description,
-        project: project
+        project: project,
         items: items,
         editItem: false,
         focusTodo: true
