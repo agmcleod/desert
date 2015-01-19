@@ -24,7 +24,7 @@ var App = React.createClass({
 
 var routes = (
   <Route name="app" path="/" handler={App}>
-    <Route name="projects" handler={ProjectList} />
+    <Route name="projects" path="/projects" handler={ProjectList} />
     <Route name="projects/new" handler={ProjectNew} />
     <Route name="projectedit" path="/projects/:id/edit" handler={ProjectEdit} />
     <Route name="projectshow" path="/projects/:id" handler={ProjectShow} />

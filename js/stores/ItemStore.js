@@ -2,12 +2,15 @@ var AppDispatcher = require("../dispatchers/AppDispatcher");
 var EventEmitter = require("events").EventEmitter;
 var ItemConstants = require("../constants/ItemConstants");
 var ItemActions = require("../actions/ItemActions");
+var LocalStorageSync = require("../local_storage_sync");
 var merge = require("react/lib/merge");
+
+var itemSync = new LocalStorageSync('items');
 
 var CHANGE_EVENT = 'change';
 
 var _showFormState = false;
-var _items = {};
+var _items = itemSync.getParsedData();
 var _setItemId = null;
 
 var ItemStore = merge(EventEmitter.prototype, {

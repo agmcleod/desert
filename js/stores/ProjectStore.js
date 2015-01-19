@@ -4,9 +4,12 @@ var ProjectConstants = require("../constants/ProjectConstants");
 var merge = require("react/lib/merge");
 var Router = require('react-router');
 var ItemStore = require("./ItemStore");
+var LocalStorageSync = require("../local_storage_sync");
 
+var projectSync = new LocalStorageSync("projects");
+console.log(projectSync.getParsedData());
 var _errors = null;
-var _projects = {};
+var _projects = projectSync.getParsedData();
 var _setId = null;
 
 var CHANGE_EVENT = 'change';
