@@ -6,9 +6,15 @@ LocalStorageSync.prototype.getParsedData = function () {
   return JSON.parse(window.localStorage.getItem(this.key) || "{}");
 }
 
+LocalStorageSync.prototype.removeObject = function (id) {
+  var json = this.getParsedData();
+  delete json["" + id];
+  this.setAll(json);
+};
+
 LocalStorageSync.prototype.set = function (object) {
   var json = this.getParsedData();
-  json[object.id] = object;
+  json[""+ object.id] = object;
   this.setAll(json);
 }
 

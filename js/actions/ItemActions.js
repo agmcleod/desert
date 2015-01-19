@@ -1,5 +1,6 @@
 var AppDispatcher = require("../dispatchers/AppDispatcher");
 var ItemConstants = require("../constants/ItemConstants");
+var ItemDataSource = require("../data_sources/ItemDataSource");
 
 var ItemActions = {
   closeForm: function () {
@@ -9,8 +10,7 @@ var ItemActions = {
   },
 
   createItem: function (data) {
-    var postData = { item: { title: data.title, description: data.description, project_id: data.project.id } };
-    $.post("/projects/" + data.project.id + "/items.json", postData).done(function (itemResData) {
+    ItemDataSource.createItem({ title: data.title, description: data.description, project_id: data.project.id }, function (itemResData) {
       AppDispatcher.handleViewAction({
         actionType: ItemConstants.ITEM_CREATE,
         item: itemResData
@@ -40,7 +40,7 @@ var ItemActions = {
   },
 
   removeItem: function (id) {
-    $.ajax({ url: "/items/" + id + ".json", type: "DELETE" }).done(function () {
+    ItemDataSource.removeItem(id, function () {
       AppDispatcher.handleViewAction({
         actionType: ItemConstants.DELETE_ITEM,
         id: id
@@ -49,9 +49,9 @@ var ItemActions = {
   },
 
   updateItem: function (item) {
-    $.ajax({ url: "/items/" + item.id + ".json", data: { item: item }, type: "PUT" }).done(function (itemResData) {
+    ItemDataSource.updateItem(item, function (itemResData) {
       AppDispatcher.handleViewAction({
-        actionType: ItemConstants.UPDATE_ITEM,
+        actionType: ItemConstants.ITEM_UPDATE,
         item: itemResData
       });
     });

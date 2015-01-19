@@ -75,7 +75,9 @@ var Item = React.createClass({
     if (typeof stateName !== "string" || stateName === "") {
       throw "bad state name: " + stateName;
     }
-    ItemActions.moveItem(this.props.item.id, stateName);
+    if (this.props.item.state !== stateName) {
+      ItemActions.moveItem(this.props.item.id, stateName);
+    }
   },
   onMouseMove: function (e) {
     if (!this.state.dragging) {

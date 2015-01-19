@@ -1,6 +1,5 @@
 var LocalStroageSync = require("../local_storage_sync");
 
-
 var projectSync = new LocalStroageSync("projects");
 var itemSync = new LocalStroageSync("items");
 
