@@ -30,7 +30,10 @@ var ProjectList = React.createClass({
   getInitialState: function () {
     var projects = ProjectStore.getAll();
     if (Object.keys(projects).length === 0) {
-      return getProjectListState(true);
+      return {
+        loading: true,
+        projects: {}
+      };
     }
     else {
       return {
@@ -46,6 +49,7 @@ var ProjectList = React.createClass({
 
   render: function () {
     var projects = this.state.projects;
+    console.log(projects);
     var projectContainers;
     if (Object.keys(projects).length === 0 && this.state.loading) {
       projectContainers = (<Loading />);

@@ -1,13 +1,22 @@
 var LocalStroageSync = require("../local_storage_sync");
-
+var ErrorHandler = require("./ErrorHandler");
 var itemSync = new LocalStroageSync("items");
+var itemRequiredFields = ['title'];
+var uuid = require("./uuid");
 
 var ItemDataSource = {
   createItem: function (dataFields, success, error) {
     $.post("/projects/" + dataFields.project_id + "/items.json", { item: dataFields }).done(function (data) {
       itemSync.set(data);
       success(data);
-    }).fail(error);
+    }).fail(function (jqXHR) {
+      if (itemSync.isOffline(jqXHR)) {
+        var errors = ErrorHandler.processErrors(itemRequiredFields, dataFields);
+      }
+      else {
+        error(jqXHR);
+      }
+    });
   },
 
   removeItem: function (id, success) {
