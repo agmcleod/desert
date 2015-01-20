@@ -121,8 +121,8 @@ var Item = React.createClass({
     var item = this.props.item;
     var className = "item " + (this.state.dragging ? "dragging" : "");
     return (
-      <li className={className} onMouseDown={this.onMouseDown} style={this.state.style}>
-        <a href="#" onClick={this.openEditDialogue}>{item.title}</a>
+      <li className={className} onClick={this.openEditDialogue} onMouseDown={this.onMouseDown} style={this.state.style}>
+        <a href="#">{item.title}</a>
         <a href="#" className="close-btn" onClick={this.removeItem}>x</a>
       </li>
     );

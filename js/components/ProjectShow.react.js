@@ -41,20 +41,28 @@ var ProjectShow = React.createClass({
     ProjectActions.getProjectInformation(id);
     ProjectStore.addChangeListener(this._onChange);
     ItemStore.addChangeListener(this._onChange);
+    this.screenWidth = window.innerWidth;
+    if (window.innerWidth > 600) {
+      $('body').removeClass('mobile-mode');
+    }
+    else if (window.innerWidth <= 600) {
+      $('body').addClass('mobile-mode');
+    }
+    window.addEventListener('resize', this.resizeHandler);
   },
 
   componentDidUpdate: function () {
-    var maxheight = 0;
-    $('.itemlists div').each(function () {
-      maxheight = Math.max(maxheight, $(this).height());
-    });
-
-    $('.itemlists div').css('height', maxheight + 'px');
+    if (!$('body').hasClass('mobile-mode')) {
+      return;
+    }
+    this.setListsToHeight();
   },
 
   componentWillUnmount: function () {
     ProjectStore.removeChangeListener(this._onChange);
     ItemStore.removeChangeListener(this._onChange);
+
+    window.removeEventListener('resize', this.resizeHandler);
   },
 
   eachItem: function (fn) {
@@ -221,9 +229,31 @@ var ProjectShow = React.createClass({
     }
   },
 
+  resizeHandler: function () {
+    if (window.innerWidth > 600 && this.screenWidth <= 600) {
+      $('body').removeClass('mobile-mode');
+      $('.itemlists div').css('height', 'auto');
+    }
+    else if (window.innerWidth <= 600 && this.screenWidth > 600) {
+      $('body').addClass('mobile-mode');
+      this.setListsToHeight();
+    }
+    this.screenWidth = window.innerWidth;
+  },
+
   saveItem: function (e) {
     e.preventDefault();
     ItemActions.createItem(this.state);
+  },
+
+  setListsToHeight: function () {
+    var maxheight = 0;
+    $('.itemlists div').css('height', 'auto');
+    $('.itemlists div').each(function () {
+      maxheight = Math.max(maxheight, $(this).height());
+    });
+
+    $('.itemlists div').css('height', maxheight + 'px');
   },
 
   toggleCompleted: function () {
