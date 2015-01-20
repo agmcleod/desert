@@ -8,14 +8,15 @@ var ItemActions = require('../actions/ItemActions');
 var Project = require('./Project.react');
 var Loading = require('./Loading.react');
 var ItemList = require('./ItemList.react');
+var Error = require('./Error.react');
 var Router = require("react-router");
 var Link = Router.Link;
 
-function getProjectShowState (id, items, state)  {
+function getProjectShowState (id, items, state, errors)  {
   var title, description;
   var item = state.items[ItemStore.getEditingItemId()];
   var object = state;
-  if (item !== null && typeof item !== "undefined") {
+  if (item !== null && typeof item !== "undefined" && errors === null) {
     object = item;
   }
   title = object.title;
@@ -25,7 +26,8 @@ function getProjectShowState (id, items, state)  {
     items: items,
     title: title,
     description: description,
-    renderItemForm: ItemStore.getShowFormState()
+    renderItemForm: ItemStore.getShowFormState(),
+    errors: errors
   };
 }
 
@@ -64,6 +66,18 @@ var ProjectShow = React.createClass({
     }
   },
 
+  getErrorMessages: function () {
+    var messages = {};
+    if (this.state.errors !== null) {
+      var errors = this.state.errors;
+      if (errors.title) {
+        messages['title'] = errors.title.join(', ');
+      }
+    }
+
+    return messages;
+  },
+
   getInitialState: function () {
     var project = ProjectStore.findById(this.getParams().id);
     if (project) {
@@ -74,7 +88,8 @@ var ProjectShow = React.createClass({
         project: project,
         items: items,
         editItem: false,
-        focusTodo: true
+        focusTodo: true,
+        errors: null
       };
     }
     else {
@@ -84,7 +99,8 @@ var ProjectShow = React.createClass({
         project: null,
         items: [],
         editItem: null,
-        focusTodo: true
+        focusTodo: true,
+        errors: null
       };
     }
   },
@@ -107,7 +123,8 @@ var ProjectShow = React.createClass({
   },
 
   _onChange: function () {
-    this.setState(getProjectShowState(ProjectStore.getSetId(), ItemStore.getItems(), this.state));
+    var errors = ItemStore.getErrors();
+    this.setState(getProjectShowState(ProjectStore.getSetId(), ItemStore.getItems(), this.state, errors));
   },
 
   render: function () {
@@ -140,6 +157,7 @@ var ProjectShow = React.createClass({
 
       var form = null;
       if (this.state.renderItemForm) {
+        var messages = this.getErrorMessages();
         var style = { left: $('.todo-items').offset().left + "px" };
         form = (
           <div className="new-item" style={style}>
@@ -147,7 +165,8 @@ var ProjectShow = React.createClass({
             <form onSubmit={handler}>
               <h3>{formTitle}</h3>
               <div className="field text-field">
-                <input type="text" id="title" onChange={this.handleChange("title")} placeholder="Title" value={this.state.title} />
+                <input type="text" id="title" onChange={this.handleChange("title")} placeholder="Title (required)" value={this.state.title} />
+                <Error message={messages['title']} />
               </div>
 
               <div className="field">

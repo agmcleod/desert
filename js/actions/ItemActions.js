@@ -15,6 +15,11 @@ var ItemActions = {
         actionType: ItemConstants.ITEM_CREATE,
         item: itemResData
       });
+    }, function (jqXHR) {
+      AppDispatcher.handleViewAction({
+        actionType: ItemConstants.ITEM_CREATE_FAIL,
+        errors: jqXHR.responseJSON.errors
+      });
     });
   },
 
@@ -53,6 +58,11 @@ var ItemActions = {
       AppDispatcher.handleViewAction({
         actionType: ItemConstants.ITEM_UPDATE,
         item: itemResData
+      });
+    }, function (jqXHR) {
+      AppDispatcher.handleViewAction({
+        actionType: ItemConstants.ITEM_UPDATE_FAIL,
+        errors: jqXHR.responseJSON.errors
       });
     });
   }

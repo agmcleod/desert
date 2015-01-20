@@ -12,6 +12,7 @@ var CHANGE_EVENT = 'change';
 var _showFormState = false;
 var _items = itemSync.getParsedData();
 var _setItemId = null;
+var _errors = null;
 
 var ItemStore = merge(EventEmitter.prototype, {
   addChangeListener: function(callback) {
@@ -20,6 +21,10 @@ var ItemStore = merge(EventEmitter.prototype, {
 
   emitChange: function () {
     this.emit(CHANGE_EVENT);
+  },
+
+  getErrors: function () {
+    return _errors;
   },
 
   getShowFormState: function () {
@@ -65,6 +70,10 @@ var ItemStore = merge(EventEmitter.prototype, {
     delete _items[id];
   },
 
+  setErrors: function (errors) {
+    _errors = errors;
+  },
+
   setShowFormState: function (state) {
     _showFormState = state;
   },
@@ -88,6 +97,7 @@ AppDispatcher.register(function (payload) {
     case ItemConstants.CLOSE_FORM:
       ItemStore.setEditingItemId(null);
       ItemStore.setShowFormState(false);
+      ItemStore.setErrors(null);
       break;
     case ItemConstants.DELETE_ITEM:
       ItemStore.removeItem(action.id);
@@ -95,6 +105,9 @@ AppDispatcher.register(function (payload) {
     case ItemConstants.ITEM_CREATE:
       ItemStore.setItem(action.item);
       ItemStore.setShowFormState(false);
+      break;
+    case ItemConstants.ITEM_CREATE_FAIL:
+      ItemStore.setErrors(action.errors);
       break;
     case ItemConstants.ITEM_EDIT:
       ItemStore.setShowFormState(true);
@@ -113,6 +126,9 @@ AppDispatcher.register(function (payload) {
       ItemStore.setItem(action.item);
       ItemStore.setEditingItemId(null);
       ItemStore.setShowFormState(false);
+      break;
+    case ItemConstants.ITEM_UPDATE_FAIL:
+      ItemStore.setErrors(action.errors);
       break;
     default:
       return true;
