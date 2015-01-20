@@ -12,7 +12,7 @@ var Project = React.createClass({
     var project = this.props.project;
     return (
       <div className="project">
-        <h2><Link to="projectshow" params={project}>{project.title}</Link></h2>
+        <h2><Link to="projectshow" params={{ id: project.id }}>{project.title}</Link></h2>
         <Link to="projectedit" params={{ id: project.id }} className="edit">Edit</Link>
         <p>{project.description}</p>
       </div>

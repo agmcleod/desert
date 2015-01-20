@@ -165,12 +165,11 @@ var ProjectShow = React.createClass({
             <form onSubmit={handler}>
               <h3>{formTitle}</h3>
               <div className="field text-field">
-                <input type="text" id="title" onChange={this.handleChange("title")} placeholder="Title (required)" value={this.state.title} />
+                <label htmlFor="title">
+                  Title: <span className="req">*</span>
+                </label>
+                <input type="text" id="title" onChange={this.handleChange("title")} value={this.state.title} />
                 <Error message={messages['title']} />
-              </div>
-
-              <div className="field">
-                <textarea id="description" rows="4" onChange={this.handleChange("description")} value={this.state.description} />
               </div>
 
               <div className="field field-submit">
