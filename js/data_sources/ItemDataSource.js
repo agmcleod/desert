@@ -1,6 +1,6 @@
-var LocalStroageSync = require("../local_storage_sync");
+var LocalStorageSync = require("../local_storage_sync");
 var ErrorHandler = require("./ErrorHandler");
-var itemSync = new LocalStroageSync("items");
+var itemSync = new LocalStorageSync("items");
 var itemRequiredFields = ['title'];
 var uuid = require("./uuid");
 
