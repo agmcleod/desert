@@ -3,18 +3,17 @@ var EventEmitter = require("events").EventEmitter;
 var ItemConstants = require("../constants/ItemConstants");
 var ItemActions = require("../actions/ItemActions");
 var LocalStorageSync = require("../local_storage_sync");
-var merge = require("react/lib/merge");
 
 var itemSync = new LocalStorageSync('items');
 
 var CHANGE_EVENT = 'change';
 
-var _showFormState = false;
+var _newItemState = false;
 var _items = itemSync.getParsedData();
 var _setItemId = null;
 var _errors = null;
 
-var ItemStore = merge(EventEmitter.prototype, {
+var ItemStore = Object.assign(EventEmitter.prototype, {
   addChangeListener: function(callback) {
     this.on(CHANGE_EVENT, callback);
   },
@@ -27,8 +26,8 @@ var ItemStore = merge(EventEmitter.prototype, {
     return _errors;
   },
 
-  getShowFormState: function () {
-    return _showFormState;
+  getShowNewFormState: function () {
+    return _newItemState;
   },
 
   getItem: function (id) {
@@ -74,8 +73,8 @@ var ItemStore = merge(EventEmitter.prototype, {
     _errors = errors;
   },
 
-  setShowFormState: function (state) {
-    _showFormState = state;
+  setShowNewFormState: function (state) {
+    _newItemState = state;
   },
 
   setEditingItemId: function (id) {
@@ -96,7 +95,7 @@ AppDispatcher.register(function (payload) {
   switch (action.actionType) {
     case ItemConstants.CLOSE_FORM:
       ItemStore.setEditingItemId(null);
-      ItemStore.setShowFormState(false);
+      ItemStore.setShowNewFormState(false);
       ItemStore.setErrors(null);
       break;
     case ItemConstants.DELETE_ITEM:
@@ -104,13 +103,12 @@ AppDispatcher.register(function (payload) {
       break;
     case ItemConstants.ITEM_CREATE:
       ItemStore.setItem(action.item);
-      ItemStore.setShowFormState(false);
+      ItemStore.setShowNewFormState(false);
       break;
     case ItemConstants.ITEM_CREATE_FAIL:
       ItemStore.setErrors(action.errors);
       break;
     case ItemConstants.ITEM_EDIT:
-      ItemStore.setShowFormState(true);
       ItemStore.setEditingItemId(action.id);
       break;
     case ItemConstants.ITEM_MOVE:
@@ -119,13 +117,11 @@ AppDispatcher.register(function (payload) {
       ItemActions.updateItem(item);
       break;
     case ItemConstants.ITEM_NEW:
-      ItemStore.setShowFormState(true);
-      ItemStore.setEditingItemId(null);
+      ItemStore.setShowNewFormState(true);
       break;
     case ItemConstants.ITEM_UPDATE:
       ItemStore.setItem(action.item);
       ItemStore.setEditingItemId(null);
-      ItemStore.setShowFormState(false);
       break;
     case ItemConstants.ITEM_UPDATE_FAIL:
       ItemStore.setErrors(action.errors);

@@ -4,18 +4,28 @@
 
 var React = require("react");
 var Item = require('./Item.react');
+var ItemStore = require('../stores/ItemStore');
 
 var ItemList = React.createClass({
   render: function () {
     var items = this.props.items;
     var itemList = [];
+    var editingId = ItemStore.getEditingItemId();
     for (var i = 0; i < items.length; i++) {
       var item = items[i];
-      itemList.push(<Item item={item} key={item.id} />);
-    };
+      itemList.push(<Item item={item} editing={editingId === item.id} key={item.id} />);
+    }
+
+    var form = null;
+    if (this.props.newItem) {
+      form = <Item projectId={this.props.projectId} newItem={true} />
+    }
 
     return (
-      <ul className={this.props.state}>{itemList}</ul>
+      <ul className={this.props.stateName}>
+        {itemList}
+        {form}
+      </ul>
     );
   }
 });

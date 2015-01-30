@@ -10,7 +10,7 @@ var ItemActions = {
   },
 
   createItem: function (data) {
-    ItemDataSource.createItem({ title: data.title, description: data.description, project_id: data.project.id }, function (itemResData) {
+    ItemDataSource.createItem({ title: data.title, project_id: data.project_id }, function (itemResData) {
       AppDispatcher.handleViewAction({
         actionType: ItemConstants.ITEM_CREATE,
         item: itemResData

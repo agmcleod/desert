@@ -1,7 +1,6 @@
 var AppDispatcher = require("../dispatchers/AppDispatcher");
 var EventEmitter = require("events").EventEmitter;
 var ProjectConstants = require("../constants/ProjectConstants");
-var merge = require("react/lib/merge");
 var Router = require('react-router');
 var ItemStore = require("./ItemStore");
 var LocalStorageSync = require("../local_storage_sync");
@@ -13,7 +12,7 @@ var _setId = null;
 
 var CHANGE_EVENT = 'change';
 
-var ProjectStore = merge(EventEmitter.prototype, {
+var ProjectStore = Object.assign(EventEmitter.prototype, {
   addChangeListener: function(callback) {
     this.on(CHANGE_EVENT, callback);
   },
@@ -54,14 +53,6 @@ var ProjectStore = merge(EventEmitter.prototype, {
 
   setErrors: function (errors) {
     _errors = errors;
-  },
-
-  setItems: function (items) {
-    for (var key in items) {
-      if (items.hasOwnProperty(key)) {
-        _items[parseInt(key)] = items[key];
-      }
-    }
   },
 
   setProjects: function (projects) {

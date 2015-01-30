@@ -2,12 +2,32 @@
 var React = require('react');
 var ReactPropTypes = React.PropTypes;
 var ItemActions = require("../actions/ItemActions");
+var ItemStore = require("../stores/ItemStore");
 
 var Item = React.createClass({
   addEvents: function() {
     document.addEventListener('mousemove', this.onMouseMove);
     document.addEventListener('mouseup', this.onMouseUp);
   },
+
+  closeForm: function () {
+    ItemActions.closeForm();
+  },
+
+  componentDidMount: function () {
+    var item = this.props.item;
+    if (item) {
+      this.setState({
+        title: item.title
+      });
+    }
+    else {
+      console.log(this.props.projectId);
+      this.setState({project_id: this.props.projectId});
+    }
+
+  },
+
   // we could get away with not having this (and just having the listeners on
   // our div), but then the experience would be possibly be janky. If there's
   // anything w/ a higher z-index that gets in the way, then you're toast,
@@ -20,6 +40,10 @@ var Item = React.createClass({
       document.removeEventListener('mousemove', this.onMouseMove)
       document.removeEventListener('mouseup', this.onMouseUp)
     }
+
+    if (this.props.editing || this.props.newItem) {
+      this.refs.textField.getDOMNode().focus();
+    }
   },
 
   getInitialState: function () {
@@ -31,6 +55,12 @@ var Item = React.createClass({
       },
       dragging: false
     }
+  },
+
+  onChange: function (e) {
+    var value = e.target.value;
+    this.state.title = value;
+    this.setState({title: value});
   },
 
   // calculate relative position to the mouse and set dragging=true
@@ -103,10 +133,6 @@ var Item = React.createClass({
     }
   },
 
-  propTypes: {
-    item: ReactPropTypes.object.isRequired
-  },
-
   removeEvents: function() {
     document.removeEventListener('mousemove', this.onMouseMove);
     document.removeEventListener('mouseup', this.onMouseUp);
@@ -120,12 +146,52 @@ var Item = React.createClass({
   render: function () {
     var item = this.props.item;
     var className = "item " + (this.state.dragging ? "dragging" : "");
-    return (
-      <li className={className} onClick={this.openEditDialogue} onMouseDown={this.onMouseDown} style={this.state.style}>
-        <a href="#">{item.title}</a>
-        <a href="#" className="close-btn" onClick={this.removeItem}>x</a>
-      </li>
-    );
+    if (this.props.editing) {
+      return (
+        <li className={className} style={this.state.style}>
+          <input ref="textField" type="text" value={this.state.title} onChange={this.onChange} onKeyUp={this.updateItem} />
+        </li>
+      );
+    }
+    else if(this.props.newItem) {
+      return (
+        <li className={className} style={this.state.style}>
+          <input ref="textField" type="text" value={this.state.title} onChange={this.onChange} onKeyUp={this.saveItem} />
+        </li>
+      );
+    }
+    else {
+      return (
+        <li className={className} onClick={this.openEditDialogue} onMouseDown={this.onMouseDown} style={this.state.style}>
+          <a href="#">{item.title}</a>
+          <a href="#" className="close-btn" onClick={this.removeItem}>x</a>
+        </li>
+      );
+    }
+  },
+
+  saveItem: function (e) {
+    if (e.keyCode === 27) {
+      this.closeForm();
+    }
+    else if (e.keyCode === 13) {
+      var value = this.state.title;
+      if (value !== null && value.length > 0) {
+        ItemActions.createItem(this.state);
+      }
+    }
+  },
+
+  updateItem: function (e) {
+    if (e.keyCode === 27) {
+      this.closeForm();
+    }
+    else if (e.keyCode === 13) {
+      var value = this.state.title;
+      if (value !== null && value.length > 0) {
+        ItemActions.updateItem({ title: value, id: ItemStore.getEditingItemId() });
+      }
+    }
   }
 });
 
