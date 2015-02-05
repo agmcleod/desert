@@ -89,24 +89,34 @@ var Item = React.createClass({
   },
   onMouseUp: function (e) {
     this.removeEvents();
-    this.setState({dragging: false, style: this.getInitialState().style });
     var x = e.clientX + document.body.scrollLeft;
     var y = e.clientY + document.body.scrollTop;
 
     // TODO: Figure out a way without querying the DOM like this.
     var stateName;
-    $('.item-list-container[id!="'+ this.props.state +'-items"], a.tab').each(function () {
+    var position = 1;
+
+    var _this = this;
+
+    $('.item-list-container, a.tab').each(function () {
       var rect = this.getBoundingClientRect();
       if (x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom) {
         stateName = $(this).data('state-name');
       }
+
+      if (!$(this).hasClass('tab') && $(this).find('li').length > 0) {
+        position = ~~((y - rect.top) / _this.getDOMNode().clientHeight) + 1;
+      }
     });
+
     if (typeof stateName !== "string" || stateName === "") {
-      throw "bad state name: " + stateName;
+      e.stopPropagation();
+      return;
     }
-    if (this.props.item.state !== stateName) {
-      ItemActions.moveItem(this.props.item.id, stateName);
+    else {
+      ItemActions.moveItem(this.props.item.id, stateName, position);
     }
+    this.setState({dragging: false, style: this.getInitialState().style });
   },
   onMouseMove: function (e) {
     if (!this.state.dragging) {

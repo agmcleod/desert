@@ -13,6 +13,30 @@ var _items = itemSync.getParsedData();
 var _setItemId = null;
 var _errors = null;
 
+function collectionNotForId (id, collection) {
+  var coll = [];
+  for (var i = collection.length - 1; i >= 0; i--) {
+    var it = collection[i];
+    if (it.id !== id) {
+      coll.push(it);
+    }
+  }
+
+  return coll;
+}
+
+function itemSort (a, b) {
+  if (a.position < b.position) {
+    return -1;
+  }
+  else if (a.position > b.position) {
+    return 1;
+  }
+  else {
+    return 0;
+  }
+}
+
 var ItemStore = Object.assign(EventEmitter.prototype, {
   addChangeListener: function(callback) {
     this.on(CHANGE_EVENT, callback);
@@ -53,12 +77,52 @@ var ItemStore = Object.assign(EventEmitter.prototype, {
     }
   },
 
+  getItemsByState: function (stateName) {
+    var items = [];
+    for (var id in _items) {
+      if (_items.hasOwnProperty(id)) {
+        var item = _items[id];
+        if (item.state === stateName) {
+          items.push(item);
+        }
+      }
+    }
+
+    return items;
+  },
+
   getEditingItemId: function () {
     return _setItemId;
   },
 
-  moveItem: function (id, stateName) {
-    _items[id].state = stateName;
+  moveItem: function (id, stateName, position) {
+    var item = _items[id];
+
+    var temp = this.getItemsByState(item.state);
+    // get items for the state
+    var itemsForState = collectionNotForId(item.id, temp);
+
+    itemsForState.sort(itemSort);
+    // reset their position without the one being moved
+    for (var i = 0; i < itemsForState.length; i++) {
+      var it = itemsForState[i];
+      it.position = i + 1;
+    }
+
+    item.state = stateName;
+    item.position = position;
+
+    temp = this.getItemsByState(item.state);
+    itemsForState = collectionNotForId(item.id, temp);
+
+    var index = 1;
+    for (var i = 0; i < itemsForState.length; i++) {
+      var it = itemsForState[i];
+      if (it.position >= item.position) {
+        it.position = item.position + index;
+        index++;
+      }
+    }
   },
 
   removeChangeListener: function(callback) {
@@ -103,7 +167,6 @@ AppDispatcher.register(function (payload) {
       break;
     case ItemConstants.ITEM_CREATE:
       ItemStore.setItem(action.item);
-      // ItemStore.setShowNewFormState(false);
       break;
     case ItemConstants.ITEM_CREATE_FAIL:
       ItemStore.setErrors(action.errors);
@@ -112,7 +175,7 @@ AppDispatcher.register(function (payload) {
       ItemStore.setEditingItemId(action.id);
       break;
     case ItemConstants.ITEM_MOVE:
-      ItemStore.moveItem(action.id, action.stateName);
+      ItemStore.moveItem(action.id, action.stateName, action.position);
       var item = ItemStore.getItem(action.id);
       ItemActions.updateItem(item);
       break;

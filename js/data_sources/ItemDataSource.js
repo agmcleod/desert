@@ -28,7 +28,7 @@ var ItemDataSource = {
 
   updateItem: function (item, success, error) {
     $.ajax({ url: "/items/" + item.id + ".json", data: { item: item }, type: "PUT" }).done(function (data) {
-      itemSync.set(data);
+      itemSync.setArray(data);
       success(data);
     }).fail(error);
   }

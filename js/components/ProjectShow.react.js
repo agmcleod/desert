@@ -20,6 +20,18 @@ function getProjectShowState (id, items)  {
   };
 }
 
+function itemSort (a, b) {
+  if (a.position < b.position) {
+    return -1;
+  }
+  else if (a.position > b.position) {
+    return 1;
+  }
+  else {
+    return 0;
+  }
+}
+
 var ProjectShow = React.createClass({
   mixins: [ Router.State ],
   componentDidMount: function () {
@@ -110,6 +122,10 @@ var ProjectShow = React.createClass({
           completedItems.push(item);
         }
       });
+
+      todoItems.sort(itemSort);
+      progressItems.sort(itemSort);
+      completedItems.sort(itemSort);
 
       return (
         <div className="projects project-show items">

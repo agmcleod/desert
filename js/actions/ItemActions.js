@@ -30,10 +30,11 @@ var ItemActions = {
     });
   },
 
-  moveItem: function (id, stateName) {
+  moveItem: function (id, stateName, position) {
     AppDispatcher.handleViewAction({
       actionType: ItemConstants.ITEM_MOVE,
       stateName: stateName,
+      position: position,
       id: id
     });
   },

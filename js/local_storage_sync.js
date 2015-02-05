@@ -37,6 +37,15 @@ LocalStorageSync.prototype.set = function (object) {
   this.setAll(json);
 }
 
+LocalStorageSync.prototype.setArray = function (array) {
+  var json = this.getParsedData();
+  for (var i = array.length - 1; i >= 0; i--) {
+    var object = array[i];
+    json[""+ object.id] = object;
+  }
+  this.setAll(json);
+}
+
 LocalStorageSync.prototype.setAll = function (object) {
   window.localStorage.setItem(this.key, JSON.stringify(object));
 }
