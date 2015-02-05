@@ -22,7 +22,6 @@ var Item = React.createClass({
       });
     }
     else {
-      console.log(this.props.projectId);
       this.setState({project_id: this.props.projectId});
     }
 
@@ -157,6 +156,7 @@ var Item = React.createClass({
       return (
         <li className={className} style={this.state.style}>
           <input ref="textField" type="text" value={this.state.title} onChange={this.onChange} onKeyUp={this.saveItem} />
+          <a href="#" className="close-btn" onClick={this.closeForm}>x</a>
         </li>
       );
     }
@@ -178,6 +178,7 @@ var Item = React.createClass({
       var value = this.state.title;
       if (value !== null && value.length > 0) {
         ItemActions.createItem(this.state);
+        this.state.title = '';
       }
     }
   },
@@ -190,6 +191,7 @@ var Item = React.createClass({
       var value = this.state.title;
       if (value !== null && value.length > 0) {
         ItemActions.updateItem({ title: value, id: ItemStore.getEditingItemId() });
+        this.state.title = '';
       }
     }
   }

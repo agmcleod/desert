@@ -103,7 +103,7 @@ AppDispatcher.register(function (payload) {
       break;
     case ItemConstants.ITEM_CREATE:
       ItemStore.setItem(action.item);
-      ItemStore.setShowNewFormState(false);
+      // ItemStore.setShowNewFormState(false);
       break;
     case ItemConstants.ITEM_CREATE_FAIL:
       ItemStore.setErrors(action.errors);
