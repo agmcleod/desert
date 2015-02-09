@@ -176,7 +176,7 @@ var Item = React.createClass({
     else {
       return (
         <li className={className} onMouseDown={this.onMouseDown} style={this.state.style} id={"item_" + this.props.item.id}>
-          <a href="#">{item.title}</a>
+          <a href="#">{this.state.title}</a>
           <a href="#" className="close-btn" onClick={this.removeItem}>x</a>
         </li>
       );
@@ -191,7 +191,6 @@ var Item = React.createClass({
       var value = this.state.title;
       if (value !== null && value.length > 0) {
         ItemActions.createItem(this.state);
-        this.state.title = '';
       }
     }
   },
@@ -204,7 +203,6 @@ var Item = React.createClass({
       var value = this.state.title;
       if (value !== null && value.length > 0) {
         ItemActions.updateItem({ title: value, id: ItemStore.getEditingItemId() });
-        this.state.title = '';
       }
     }
   }
