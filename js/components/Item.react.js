@@ -111,7 +111,7 @@ var Item = React.createClass({
     var stateName;
     var position = 1;
 
-    var _this = this;
+    var node = this.getDOMNode();
 
     $('.item-list-container, a.tab').each(function () {
       var rect = this.getBoundingClientRect();
@@ -120,7 +120,16 @@ var Item = React.createClass({
       }
 
       if (!$(this).hasClass('tab') && $(this).find('li').length > 0) {
-        position = ~~((y - rect.top) / _this.getDOMNode().clientHeight) + 1;
+        var positions = $(this).find('li[id!="'+ node.id +'"]').map(function () {
+          return $(this).offset().top;
+        });
+        for (var i = 0; i < positions.length; i++) {
+          if (y < positions[i]) {
+            break;
+          }
+          position = i + 1;
+        }
+
       }
     });
     if (typeof stateName !== "string" || stateName === "") {
@@ -166,7 +175,7 @@ var Item = React.createClass({
     }
     else {
       return (
-        <li className={className} onMouseDown={this.onMouseDown} style={this.state.style}>
+        <li className={className} onMouseDown={this.onMouseDown} style={this.state.style} id={"item_" + this.props.item.id}>
           <a href="#">{item.title}</a>
           <a href="#" className="close-btn" onClick={this.removeItem}>x</a>
         </li>
