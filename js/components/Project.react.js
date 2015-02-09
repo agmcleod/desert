@@ -10,10 +10,14 @@ var Project = React.createClass({
 
   render: function () {
     var project = this.props.project;
+    var editAction = null;
+    if (this.props.loggedIn) {
+      editAction = (<Link to="projectedit" params={{ id: project.id }} className="edit">Edit</Link>);
+    }
     return (
       <div className="project">
         <h2><Link to="projectshow" params={{ id: project.id }}>{project.title}</Link></h2>
-        <Link to="projectedit" params={{ id: project.id }} className="edit">Edit</Link>
+        {editAction}
         <p>{project.description}</p>
       </div>
     );

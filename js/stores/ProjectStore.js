@@ -1,6 +1,8 @@
 var AppDispatcher = require("../dispatchers/AppDispatcher");
 var EventEmitter = require("events").EventEmitter;
 var ProjectConstants = require("../constants/ProjectConstants");
+var AppConstants = require("../constants/AppConstants");
+
 var Router = require('react-router');
 var ItemStore = require("./ItemStore");
 var LocalStorageSync = require("../local_storage_sync");
@@ -67,6 +69,9 @@ var ProjectStore = Object.assign(EventEmitter.prototype, {
 AppDispatcher.register(function(payload) {
   var action = payload.action;
   switch(action.actionType) {
+    case AppConstants.ACCESS_DENIED:
+      ProjectStore.setErrors({ 'access': ['You must login to do that.'] });
+      break;
     case ProjectConstants.PROJECT_CREATE:
       ProjectStore.appendProject(action.project);
       break;

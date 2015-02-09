@@ -1,6 +1,7 @@
 var AppDispatcher = require("../dispatchers/AppDispatcher");
 var EventEmitter = require("events").EventEmitter;
 var ItemConstants = require("../constants/ItemConstants");
+var AppConstants = require("../constants/AppConstants");
 var ItemActions = require("../actions/ItemActions");
 var LocalStorageSync = require("../local_storage_sync");
 

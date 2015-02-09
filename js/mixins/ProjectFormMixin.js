@@ -10,6 +10,10 @@ var ProjectFormMixin = {
       if (errors.description) {
         messages['description'] = errors.description.join(', ');
       }
+
+      if (errors.access) {
+        messages['access'] = errors.access.join(', ');
+      }
     }
 
     return messages;

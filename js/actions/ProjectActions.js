@@ -1,6 +1,7 @@
 var AppDispatcher = require("../dispatchers/AppDispatcher");
 var ProjectConstants = require("../constants/ProjectConstants");
 var ProjectDataSource = require("../data_sources/ProjectDataSource");
+var AppConstants = require("../constants/AppConstants");
 
 var ProjectActions = {
   createProject: function (data) {
@@ -10,10 +11,17 @@ var ProjectActions = {
         project: data
       });
     }, function (jqXHR) {
-      AppDispatcher.handleViewAction({
-        actionType: ProjectConstants.PROJECT_CREATE_FAIL,
-        errors: jqXHR.responseJSON.errors
-      });
+      if (jqXHR.status === 403) {
+        AppDispatcher.handleViewAction({
+          actionType: AppConstants.ACCESS_DENIED
+        });
+      }
+      else {
+        AppDispatcher.handleViewAction({
+          actionType: ProjectConstants.PROJECT_CREATE_FAIL,
+          errors: jqXHR.responseJSON.errors
+        });
+      }
     });
   },
 

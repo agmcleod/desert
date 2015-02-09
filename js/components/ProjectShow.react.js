@@ -8,7 +8,10 @@ var ItemActions = require('../actions/ItemActions');
 var Project = require('./Project.react');
 var Loading = require('./Loading.react');
 var ItemList = require('./ItemList.react');
-var Error = require('./Error.react');
+
+var SessionActions = require("../actions/SessionActions");
+var SessionStore = require("../stores/SessionStore");
+
 var Router = require("react-router");
 var Link = Router.Link;
 
@@ -39,6 +42,8 @@ var ProjectShow = React.createClass({
     ProjectActions.getProjectInformation(id);
     ProjectStore.addChangeListener(this._onChange);
     ItemStore.addChangeListener(this._onChange);
+    SessionStore.addChangeListener(this._onSessionChange);
+    SessionActions.verifySession();
     this.screenWidth = window.innerWidth;
     if (window.innerWidth > 600) {
       $('body').removeClass('mobile-mode');
@@ -59,6 +64,7 @@ var ProjectShow = React.createClass({
   componentWillUnmount: function () {
     ProjectStore.removeChangeListener(this._onChange);
     ItemStore.removeChangeListener(this._onChange);
+    SessionStore.removeChangeListener(this._onSessionChange);
 
     window.removeEventListener('resize', this.resizeHandler);
   },
@@ -81,7 +87,8 @@ var ProjectShow = React.createClass({
         items: items,
         editItem: false,
         focusTodo: true,
-        renderItemForm: false
+        renderItemForm: false,
+        loggedIn: SessionStore.getLoggedInStatus()
       };
     }
     else {
@@ -90,7 +97,8 @@ var ProjectShow = React.createClass({
         items: [],
         editItem: null,
         focusTodo: true,
-        renderItemForm: false
+        renderItemForm: false,
+        loggedIn: SessionStore.getLoggedInStatus()
       };
     }
   },
@@ -102,6 +110,10 @@ var ProjectShow = React.createClass({
 
   _onChange: function () {
     this.setState(getProjectShowState(ProjectStore.getSetId(), ItemStore.getItems()));
+  },
+
+  _onSessionChange: function () {
+    this.setState({ loggedIn: SessionStore.getLoggedInStatus() });
   },
 
   render: function () {
@@ -127,6 +139,13 @@ var ProjectShow = React.createClass({
       progressItems.sort(itemSort);
       completedItems.sort(itemSort);
 
+      var newItemAction = null;
+      if (this.state.loggedIn) {
+        newItemAction = (<p className="action-btn">
+          <a href={newItemHref} onClick={this.newItem}>New Item</a>
+        </p>);
+      }
+
       return (
         <div className="projects project-show items">
           <h1>{this.state.project.title}</h1>
@@ -134,9 +153,7 @@ var ProjectShow = React.createClass({
             <Link to="projects">Projects</Link>
             <span>{this.state.project.title}</span>
           </div>
-          <p className="action-btn">
-            <a href={newItemHref} onClick={this.newItem}>New Item</a>
-          </p>
+          {newItemAction}
           <div className="items">
             <div className="tabs">
               <a className={"todo-tab tab" + (this.state.focusTodo ? ' focused' : '')} data-state-name="todo" onClick={this.toggleTodo}>To Do</a>
@@ -145,13 +162,13 @@ var ProjectShow = React.createClass({
             </div>
             <div className="itemlists">
               <div className={"todo-items item-list-container" + (this.state.focusTodo ? ' highz' : '')} data-state-name="todo">
-                <ItemList projectId={this.state.project.id} items={todoItems} newItem={this.state.renderItemForm} stateName="todo" />
+                <ItemList projectId={this.state.project.id} items={todoItems} newItem={this.state.renderItemForm} stateName="todo" loggedIn={this.state.loggedIn} />
               </div>
               <div className={"inprogress-items item-list-container" + (this.state.focusInprogress ? ' highz' : '')} data-state-name="inprogress">
-                <ItemList projectId={this.state.project.id} items={progressItems} stateName="inprogress" />
+                <ItemList projectId={this.state.project.id} items={progressItems} stateName="inprogress" loggedIn={this.state.loggedIn} />
               </div>
               <div className={"completed-items item-list-container" + (this.state.focusCompleted ? ' highz' : '')} data-state-name="completed">
-                <ItemList projectId={this.state.project.id} items={completedItems} stateName="completed" />
+                <ItemList projectId={this.state.project.id} items={completedItems} stateName="completed" loggedIn={this.state.loggedIn} />
               </div>
             </div>
           </div>

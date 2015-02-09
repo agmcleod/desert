@@ -65,6 +65,7 @@ var ProjectEdit = React.createClass({
           <span>Edit</span>
         </div>
         <form action="/projects" method="post" onSubmit={this.updateProject}>
+          <Error message={messages['access']} />
           <div className="field text-field">
             <label htmlFor="title">Title</label>
             <input className="textField" type="text" name="title" id="title" onChange={this.handleChange("title")} value={this.state.title} />

@@ -174,12 +174,21 @@ var Item = React.createClass({
       );
     }
     else {
-      return (
-        <li className={className} onMouseDown={this.onMouseDown} style={this.state.style} id={"item_" + this.props.item.id}>
-          <a href="#">{this.state.title}</a>
-          <a href="#" className="close-btn" onClick={this.removeItem}>x</a>
-        </li>
-      );
+      if (this.props.loggedIn) {
+        return (
+          <li className={className} onMouseDown={this.onMouseDown} style={this.state.style} id={"item_" + this.props.item.id}>
+            <a href="#">{this.state.title}</a>
+            <a href="#" className="close-btn" onClick={this.removeItem}>x</a>
+          </li>
+        );
+      }
+      else {
+        return (
+          <li className={className} style={this.state.style} id={"item_" + this.props.item.id}>
+            <a href="#">{this.state.title}</a>
+          </li>
+        );
+      }
     }
   },
 
