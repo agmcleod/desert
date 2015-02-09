@@ -79,7 +79,6 @@ var Item = React.createClass({
       pageOffset = el.offset();
     }
     this.setState({
-      dragging: true,
       originX: e.pageX,
       originY: e.pageY,
       elementX: pageOffset.left,
@@ -87,6 +86,22 @@ var Item = React.createClass({
       width: $(this.getDOMNode()).width()
     });
   },
+
+  onMouseMove: function (e) {
+    var deltaX = e.pageX - this.state.originX;
+    var deltaY = e.pageY - this.state.originY;
+
+    this.setState({
+      dragging: true,
+      style: {
+        position: 'absolute',
+        left: this.state.elementX + deltaX + document.body.scrollLeft,
+        top: this.state.elementY + deltaY + document.body.scrollTop,
+        width: this.state.width
+      }
+    });
+  },
+
   onMouseUp: function (e) {
     this.removeEvents();
     var x = e.clientX + document.body.scrollLeft;
@@ -108,36 +123,15 @@ var Item = React.createClass({
         position = ~~((y - rect.top) / _this.getDOMNode().clientHeight) + 1;
       }
     });
-
     if (typeof stateName !== "string" || stateName === "") {
       e.stopPropagation();
       return;
     }
-    else {
+    else if (this.state.dragging) {
+      this.setState({dragging: false, style: this.getInitialState().style });
       ItemActions.moveItem(this.props.item.id, stateName, position);
     }
-    this.setState({dragging: false, style: this.getInitialState().style });
-  },
-  onMouseMove: function (e) {
-    if (!this.state.dragging) {
-      return;
-    }
-    var deltaX = e.pageX - this.state.originX;
-    var deltaY = e.pageY - this.state.originY;
-
-    this.setState({
-      style: {
-        position: 'absolute',
-        left: this.state.elementX + deltaX + document.body.scrollLeft,
-        top: this.state.elementY + deltaY + document.body.scrollTop,
-        width: this.state.width
-      }
-    });
-  },
-
-  openEditDialogue: function (e) {
-    if (!this.state.dragging) {
-      e.preventDefault();
+    else {
       ItemActions.editItem(this.props.item.id);
     }
   },
@@ -172,7 +166,7 @@ var Item = React.createClass({
     }
     else {
       return (
-        <li className={className} onClick={this.openEditDialogue} onMouseDown={this.onMouseDown} style={this.state.style}>
+        <li className={className} onMouseDown={this.onMouseDown} style={this.state.style}>
           <a href="#">{item.title}</a>
           <a href="#" className="close-btn" onClick={this.removeItem}>x</a>
         </li>
