@@ -7,7 +7,10 @@ var ItemStore = require("../stores/ItemStore");
 var Item = React.createClass({
   addEvents: function() {
     document.addEventListener('mousemove', this.onMouseMove);
+    document.addEventListener('touchmove', this.onMouseMove);
     document.addEventListener('mouseup', this.onMouseUp);
+    document.addEventListener('touchend', this.onMouseUp);
+    document.addEventListener('touchcancel', this.onMouseUp);
   },
 
   closeForm: function () {
@@ -147,7 +150,10 @@ var Item = React.createClass({
 
   removeEvents: function() {
     document.removeEventListener('mousemove', this.onMouseMove);
+    document.removeEventListener('touchmove', this.onMouseMove);
     document.removeEventListener('mouseup', this.onMouseUp);
+    document.removeEventListener('touchend', this.onMouseUp);
+    document.removeEventListener('touchcancel', this.onMouseUp);
   },
 
   removeItem: function (e) {
@@ -160,14 +166,14 @@ var Item = React.createClass({
     var className = "item " + (this.state.dragging ? "dragging" : "");
     if (this.props.editing) {
       return (
-        <li className={className} style={this.state.style}>
+        <li className={className} onMouseDown={this.onMouseDown} style={this.state.style}>
           <input ref="textField" type="text" value={this.state.title} onChange={this.onChange} onKeyUp={this.updateItem} />
         </li>
       );
     }
     else if(this.props.newItem) {
       return (
-        <li className={className} style={this.state.style}>
+        <li className={className} onMouseDown={this.onMouseDown} style={this.state.style}>
           <input ref="textField" type="text" value={this.state.title} onChange={this.onChange} onKeyUp={this.saveItem} />
           <a href="#" className="close-btn" onClick={this.closeForm}>x</a>
         </li>
