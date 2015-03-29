@@ -81,6 +81,7 @@ var Item = React.createClass({
     else {
       pageOffset = el.offset();
     }
+    console.log(e);
     this.setState({
       originX: e.pageX,
       originY: e.pageY,
@@ -93,6 +94,7 @@ var Item = React.createClass({
   onMouseMove: function (e) {
     var deltaX = e.pageX - this.state.originX;
     var deltaY = e.pageY - this.state.originY;
+    console.log(e);
 
     this.setState({
       dragging: true,
