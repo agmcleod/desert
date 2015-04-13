@@ -38,7 +38,7 @@ function itemSort (a, b) {
 var ProjectShow = React.createClass({
   mixins: [ Router.State ],
   componentDidMount: function () {
-    var id = this.getParams().id;
+    var id = this.getParams()._id;
     ProjectActions.getProjectInformation(id);
     ProjectStore.addChangeListener(this._onChange);
     ItemStore.addChangeListener(this._onChange);
@@ -79,9 +79,9 @@ var ProjectShow = React.createClass({
   },
 
   getInitialState: function () {
-    var project = ProjectStore.findById(this.getParams().id);
+    var project = ProjectStore.findById(this.getParams()._id);
     if (project) {
-      var items = ItemStore.getItems(project.id);
+      var items = ItemStore.getItems(project._id);
       return {
         project: project,
         items: items,
@@ -118,7 +118,7 @@ var ProjectShow = React.createClass({
 
   render: function () {
     if (this.state.project !== null) {
-      var newItemHref = "/projects/" + this.state.project.id + "/items/new";
+      var newItemHref = "/projects/" + this.state.project._id + "/items/new";
       var todoItems = [];
       var progressItems = [];
       var completedItems = [];
@@ -162,13 +162,13 @@ var ProjectShow = React.createClass({
             </div>
             <div className="itemlists">
               <div className={"todo-items item-list-container" + (this.state.focusTodo ? ' highz' : '')} data-state-name="todo">
-                <ItemList projectId={this.state.project.id} items={todoItems} newItem={this.state.renderItemForm} stateName="todo" loggedIn={this.state.loggedIn} />
+                <ItemList projectId={this.state.project._id} items={todoItems} newItem={this.state.renderItemForm} stateName="todo" loggedIn={this.state.loggedIn} />
               </div>
               <div className={"inprogress-items item-list-container" + (this.state.focusInprogress ? ' highz' : '')} data-state-name="inprogress">
-                <ItemList projectId={this.state.project.id} items={progressItems} stateName="inprogress" loggedIn={this.state.loggedIn} />
+                <ItemList projectId={this.state.project._id} items={progressItems} stateName="inprogress" loggedIn={this.state.loggedIn} />
               </div>
               <div className={"completed-items item-list-container" + (this.state.focusCompleted ? ' highz' : '')} data-state-name="completed">
-                <ItemList projectId={this.state.project.id} items={completedItems} stateName="completed" loggedIn={this.state.loggedIn} />
+                <ItemList projectId={this.state.project._id} items={completedItems} stateName="completed" loggedIn={this.state.loggedIn} />
               </div>
             </div>
           </div>

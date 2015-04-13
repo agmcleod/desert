@@ -17,7 +17,7 @@ var ProjectDataSource = {
         var errors = ErrorHandler.processErrors(projectRequiredFields, dataFields);
         if (Object.keys(errors).length === 0) {
           dataFields.uuid = uuid();
-          dataFields.id = dataFields.uuid;
+          dataFields._id = dataFields.uuid;
           success(dataFields);
         }
         else {
@@ -56,7 +56,7 @@ var ProjectDataSource = {
   updateProject: function (data, success, error) {
     var dataFields = { title: data.title, description: data.description };
     $.ajax({
-      url: "/projects/" + data.id + ".json",
+      url: "/projects/" + data._id + ".json",
       data: { project: dataFields },
       type: "PUT"
     }).done(function (data) {

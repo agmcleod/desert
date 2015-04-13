@@ -13,7 +13,7 @@ var ItemList = React.createClass({
     var editingId = ItemStore.getEditingItemId();
     for (var i = 0; i < items.length; i++) {
       var item = items[i];
-      itemList.push(<Item item={item} loggedIn={this.props.loggedIn} editing={editingId === item.id} key={item.id} />);
+      itemList.push(<Item item={item} loggedIn={this.props.loggedIn} editing={editingId === item._id} key={item._id} />);
     }
 
     var form = null;

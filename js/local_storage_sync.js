@@ -33,7 +33,7 @@ LocalStorageSync.prototype.removeObject = function (id) {
 
 LocalStorageSync.prototype.set = function (object) {
   var json = this.getParsedData();
-  json[""+ object.id] = object;
+  json[""+ object._id] = object;
   this.setAll(json);
 }
 
@@ -41,7 +41,7 @@ LocalStorageSync.prototype.setArray = function (array) {
   var json = this.getParsedData();
   for (var i = array.length - 1; i >= 0; i--) {
     var object = array[i];
-    json[""+ object.id] = object;
+    json[""+ object._id] = object;
   }
   this.setAll(json);
 }

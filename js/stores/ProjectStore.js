@@ -20,8 +20,8 @@ var ProjectStore = Object.assign(EventEmitter.prototype, {
   },
 
   appendProject: function (project) {
-    _projects[project.id] = project;
-    _setId = project.id;
+    _projects[project._id] = project;
+    _setId = project._id;
     _errors = null;
   },
 

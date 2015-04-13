@@ -67,6 +67,7 @@ var Item = React.createClass({
 
   // calculate relative position to the mouse and set dragging=true
   onMouseDown: function (e) {
+    console.log(e);
     // only left mouse button
     if (e.button !== 0) {
       return;
@@ -81,7 +82,6 @@ var Item = React.createClass({
     else {
       pageOffset = el.offset();
     }
-    console.log(e);
     this.setState({
       originX: e.pageX,
       originY: e.pageY,
@@ -125,7 +125,7 @@ var Item = React.createClass({
       }
 
       if (!$(this).hasClass('tab') && $(this).find('li').length > 0) {
-        var positions = $(this).find('li[id!="'+ node.id +'"]').map(function () {
+        var positions = $(this).find('li[id!="'+ node._id +'"]').map(function () {
           return $(this).offset().top;
         });
         for (var i = 0; i < positions.length; i++) {
@@ -143,10 +143,10 @@ var Item = React.createClass({
     }
     else if (this.state.dragging) {
       this.setState({dragging: false, style: this.getInitialState().style });
-      ItemActions.moveItem(this.props.item.id, stateName, position);
+      ItemActions.moveItem(this.props.item._id, stateName, position);
     }
     else {
-      ItemActions.editItem(this.props.item.id);
+      ItemActions.editItem(this.props.item._id);
     }
   },
 
@@ -160,7 +160,7 @@ var Item = React.createClass({
 
   removeItem: function (e) {
     e.preventDefault();
-    ItemActions.removeItem(this.props.item.id);
+    ItemActions.removeItem(this.props.item._id);
   },
 
   render: function () {
@@ -184,7 +184,7 @@ var Item = React.createClass({
     else {
       if (this.props.loggedIn) {
         return (
-          <li className={className} onMouseDown={this.onMouseDown} style={this.state.style} id={"item_" + this.props.item.id}>
+          <li className={className} onMouseDown={this.onMouseDown} style={this.state.style} id={"item_" + this.props.item._id}>
             <a href="#">{this.state.title}</a>
             <a href="#" className="close-btn" onClick={this.removeItem}>x</a>
           </li>
@@ -192,7 +192,7 @@ var Item = React.createClass({
       }
       else {
         return (
-          <li className={className} style={this.state.style} id={"item_" + this.props.item.id}>
+          <li className={className} style={this.state.style} id={"item_" + this.props.item._id}>
             <a href="#">{this.state.title}</a>
           </li>
         );

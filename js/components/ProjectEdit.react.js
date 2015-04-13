@@ -10,7 +10,7 @@ var ProjectFormMixin = require("../mixins/ProjectFormMixin");
 function getProjectEditState (id, errors) {
   var project = ProjectStore.findById(id);
   return {
-    id: project.id,
+    id: project._id,
     title: project.title,
     description: project.description,
     errors: errors,
@@ -22,7 +22,7 @@ var ProjectEdit = React.createClass({
   mixins: [ProjectFormMixin, Router.Navigation, Router.State],
   componentDidMount: function () {
     ProjectStore.addChangeListener(this._onChange);
-    var id = this.getParams().id;
+    var id = this.getParams()._id;
     ProjectActions.getProjectInformation(id);
   },
 

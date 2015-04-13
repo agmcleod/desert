@@ -18,7 +18,7 @@ function collectionNotForId (id, collection) {
   var coll = [];
   for (var i = collection.length - 1; i >= 0; i--) {
     var it = collection[i];
-    if (it.id !== id) {
+    if (it._id !== id) {
       coll.push(it);
     }
   }
@@ -66,7 +66,7 @@ var ItemStore = Object.assign(EventEmitter.prototype, {
         if (_items.hasOwnProperty(id)) {
           var item = _items[id];
           if (item.project_id === project_id) {
-            items[item.id] = item;
+            items[item._id] = item;
           }
         }
       }
@@ -101,7 +101,7 @@ var ItemStore = Object.assign(EventEmitter.prototype, {
 
     var temp = this.getItemsByState(item.state);
     // get items for the state
-    var itemsForState = collectionNotForId(item.id, temp);
+    var itemsForState = collectionNotForId(item._id, temp);
 
     itemsForState.sort(itemSort);
     // reset their position without the one being moved
@@ -114,7 +114,7 @@ var ItemStore = Object.assign(EventEmitter.prototype, {
     item.position = position;
 
     temp = this.getItemsByState(item.state);
-    itemsForState = collectionNotForId(item.id, temp);
+    itemsForState = collectionNotForId(item._id, temp);
 
     var index = 1;
     for (var i = 0; i < itemsForState.length; i++) {
@@ -147,7 +147,7 @@ var ItemStore = Object.assign(EventEmitter.prototype, {
   },
 
   setItem: function (item) {
-    _items[item.id] = item;
+    _items[item._id] = item;
   },
 
   setItems: function (items) {
@@ -164,7 +164,7 @@ AppDispatcher.register(function (payload) {
       ItemStore.setErrors(null);
       break;
     case ItemConstants.DELETE_ITEM:
-      ItemStore.removeItem(action.id);
+      ItemStore.removeItem(action._id);
       break;
     case ItemConstants.ITEM_CREATE:
       ItemStore.setItem(action.item);
@@ -173,11 +173,11 @@ AppDispatcher.register(function (payload) {
       ItemStore.setErrors(action.errors);
       break;
     case ItemConstants.ITEM_EDIT:
-      ItemStore.setEditingItemId(action.id);
+      ItemStore.setEditingItemId(action._id);
       break;
     case ItemConstants.ITEM_MOVE:
-      ItemStore.moveItem(action.id, action.stateName, action.position);
-      var item = ItemStore.getItem(action.id);
+      ItemStore.moveItem(action._id, action.stateName, action.position);
+      var item = ItemStore.getItem(action._id);
       ItemActions.updateItem(item);
       break;
     case ItemConstants.ITEM_NEW:
