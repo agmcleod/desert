@@ -5,14 +5,6 @@ var ItemActions = require("../actions/ItemActions");
 var ItemStore = require("../stores/ItemStore");
 
 var Item = React.createClass({
-  addEvents: function() {
-    document.addEventListener('mousemove', this.onMouseMove);
-    document.addEventListener('touchmove', this.onMouseMove);
-    document.addEventListener('mouseup', this.onMouseUp);
-    document.addEventListener('touchend', this.onMouseUp);
-    document.addEventListener('touchcancel', this.onMouseUp);
-  },
-
   closeForm: function () {
     ItemActions.closeForm();
   },
@@ -35,14 +27,6 @@ var Item = React.createClass({
   // anything w/ a higher z-index that gets in the way, then you're toast,
   // etc.
   componentDidUpdate: function (props, state) {
-    if (this.state.dragging && !state.dragging) {
-      document.addEventListener('mousemove', this.onMouseMove)
-      document.addEventListener('mouseup', this.onMouseUp)
-    } else if (!this.state.dragging && state.dragging) {
-      document.removeEventListener('mousemove', this.onMouseMove)
-      document.removeEventListener('mouseup', this.onMouseUp)
-    }
-
     if (this.props.editing || this.props.newItem) {
       this.refs.textField.getDOMNode().focus();
     }
@@ -72,7 +56,6 @@ var Item = React.createClass({
       return;
     }
     e.stopPropagation();
-    this.addEvents();
     var pageOffset;
     var el = $(this.getDOMNode());
     if (el.parents('.item-list-container').css('position') === 'absolute') {
@@ -82,6 +65,7 @@ var Item = React.createClass({
       pageOffset = el.offset();
     }
     this.setState({
+      down: true,
       originX: e.pageX,
       originY: e.pageY,
       elementX: pageOffset.left,
@@ -91,6 +75,9 @@ var Item = React.createClass({
   },
 
   onMouseMove: function (e) {
+    if (!this.state.down) {
+      return;
+    }
     var deltaX = e.pageX - this.state.originX;
     var deltaY = e.pageY - this.state.originY;
 
@@ -106,7 +93,9 @@ var Item = React.createClass({
   },
 
   onMouseUp: function (e) {
-    this.removeEvents();
+    if (!this.state.down) {
+      return;
+    }
     var x = e.clientX + document.body.scrollLeft;
     var y = e.clientY + document.body.scrollTop;
 
@@ -146,14 +135,7 @@ var Item = React.createClass({
     else {
       ItemActions.editItem(this.props.item.id);
     }
-  },
-
-  removeEvents: function() {
-    document.removeEventListener('mousemove', this.onMouseMove);
-    document.removeEventListener('touchmove', this.onMouseMove);
-    document.removeEventListener('mouseup', this.onMouseUp);
-    document.removeEventListener('touchend', this.onMouseUp);
-    document.removeEventListener('touchcancel', this.onMouseUp);
+    this.state.down = false;
   },
 
   removeItem: function (e) {
@@ -173,7 +155,7 @@ var Item = React.createClass({
     }
     else if(this.props.newItem) {
       return (
-        <li className={className} onMouseDown={this.onMouseDown} style={this.state.style}>
+        <li className={className} style={this.state.style}>
           <input ref="textField" type="text" value={this.state.title} onChange={this.onChange} onKeyUp={this.saveItem} />
           <a href="#" className="close-btn" onClick={this.closeForm}>x</a>
         </li>
@@ -182,7 +164,8 @@ var Item = React.createClass({
     else {
       if (this.props.loggedIn) {
         return (
-          <li className={className} onMouseDown={this.onMouseDown} style={this.state.style} id={"item_" + this.props.item.id}>
+          <li className={className} onMouseDown={this.onMouseDown} onTouchStart={this.onMouseDown} onMouseMove={this.onMouseMove} onTouchMove={this.onMouse
+          } onMouseUp={this.onMouseUp} onTouchEnd={this.onMouseUp} style={this.state.style} id={"item_" + this.props.item.id}>
             <a href="#">{this.state.title}</a>
             <a href="#" className="close-btn" onClick={this.removeItem}>x</a>
           </li>
