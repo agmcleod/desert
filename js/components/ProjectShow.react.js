@@ -112,6 +112,24 @@ var ProjectShow = React.createClass({
     this.setState(getProjectShowState(ProjectStore.getSetId(), ItemStore.getItems()));
   },
 
+  onMouseDown: function (e) {
+    // only left mouse button
+    if (e.button !== 0) {
+      return;
+    }
+    e.stopPropagation();
+    this.setState({
+      originX: e.pageX,
+      originY: e.pageY,
+      dragging: true
+    });
+  },
+
+  onMouseMove: function (e) {
+    var deltaX = e.pageX - this.state.originX;
+    var deltaY = e.pageY - this.state.originY;
+  },
+
   _onSessionChange: function () {
     this.setState({ loggedIn: SessionStore.getLoggedInStatus() });
   },
@@ -147,7 +165,7 @@ var ProjectShow = React.createClass({
       }
 
       return (
-        <div className="projects project-show items">
+        <div className="projects project-show items" onMouseDown={this.onMouseDown} onTouchStart={this.onMouseDown} onMouseMove={this.onMouseMove} onTouchMove={this.onMouseMove}>
           <h1>{this.state.project.title}</h1>
           <div className="breadcrumb">
             <Link to="projects">Projects</Link>

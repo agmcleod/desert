@@ -36,11 +36,9 @@ var Item = React.createClass({
   // etc.
   componentDidUpdate: function (props, state) {
     if (this.state.dragging && !state.dragging) {
-      document.addEventListener('mousemove', this.onMouseMove)
-      document.addEventListener('mouseup', this.onMouseUp)
+      this.addEvents();
     } else if (!this.state.dragging && state.dragging) {
-      document.removeEventListener('mousemove', this.onMouseMove)
-      document.removeEventListener('mouseup', this.onMouseUp)
+      this.removeEvents();
     }
 
     if (this.props.editing || this.props.newItem) {
@@ -71,8 +69,6 @@ var Item = React.createClass({
     if (e.button !== 0) {
       return;
     }
-    e.stopPropagation();
-    this.addEvents();
     var pageOffset;
     var el = $(this.getDOMNode());
     if (el.parents('.item-list-container').css('position') === 'absolute') {
@@ -82,8 +78,6 @@ var Item = React.createClass({
       pageOffset = el.offset();
     }
     this.setState({
-      originX: e.pageX,
-      originY: e.pageY,
       elementX: pageOffset.left,
       elementY: pageOffset.top,
       width: $(this.getDOMNode()).width()
