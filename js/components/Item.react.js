@@ -138,7 +138,7 @@ var Item = React.createClass({
     else {
       if (this.props.loggedIn) {
         return (
-          <li className={className + " noselect"} onClick={this.onClick} draggable="true" onDragStart={this.onDragStart} onDragEnd={this.onDragEnd} style={this.state.style} id={"item_" + this.props.item.id}>
+          <li className={className} onClick={this.onClick} draggable="true" onDragStart={this.onDragStart} onDragEnd={this.onDragEnd} style={this.state.style} id={"item_" + this.props.item.id}>
             <a href="#">{this.state.title}</a>
             <a href="#" className="close-btn" onClick={this.removeItem}>x</a>
           </li>
