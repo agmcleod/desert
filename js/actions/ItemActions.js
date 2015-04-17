@@ -54,6 +54,13 @@ var ItemActions = {
     });
   },
 
+  setDragState: function (state) {
+    AppDispatcher.handleViewAction({
+      actionType: ItemConstants.ITEM_SET_STATE,
+      state: state
+    });
+  },
+
   updateItem: function (item) {
     ItemDataSource.updateItem(item, function (itemResData) {
       AppDispatcher.handleViewAction({

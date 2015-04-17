@@ -8,6 +8,7 @@ module.exports = keyMirror({
   ITEM_EDIT: null,
   ITEM_MOVE: null,
   ITEM_NEW: null,
+  ITEM_SET_STATE: null,
   ITEM_UPDATE: null,
   ITEM_UPDATE_FAIL: null
 });

@@ -12,6 +12,7 @@ var CHANGE_EVENT = 'change';
 var _newItemState = false;
 var _items = itemSync.getParsedData();
 var _setItemId = null;
+var _draggingItemState = null;
 var _errors = null;
 
 function collectionNotForId (id, collection) {
@@ -47,12 +48,16 @@ var ItemStore = Object.assign(EventEmitter.prototype, {
     this.emit(CHANGE_EVENT);
   },
 
-  getErrors: function () {
-    return _errors;
+  getDraggingItemState: function () {
+    return _draggingItemState;
   },
 
-  getShowNewFormState: function () {
-    return _newItemState;
+  getEditingItemId: function () {
+    return _setItemId;
+  },
+
+  getErrors: function () {
+    return _errors;
   },
 
   getItem: function (id) {
@@ -92,8 +97,8 @@ var ItemStore = Object.assign(EventEmitter.prototype, {
     return items;
   },
 
-  getEditingItemId: function () {
-    return _setItemId;
+  getShowNewFormState: function () {
+    return _newItemState;
   },
 
   moveItem: function (id, stateName, position) {
@@ -110,7 +115,9 @@ var ItemStore = Object.assign(EventEmitter.prototype, {
       it.position = i + 1;
     }
 
-    item.state = stateName;
+    if (stateName && stateName !== "") {
+      item.state = stateName;
+    }
     item.position = position;
 
     temp = this.getItemsByState(item.state);
@@ -134,16 +141,20 @@ var ItemStore = Object.assign(EventEmitter.prototype, {
     delete _items[id];
   },
 
-  setErrors: function (errors) {
-    _errors = errors;
+  resetDraggingItemState: function () {
+    _draggingItemState = null;
   },
 
-  setShowNewFormState: function (state) {
-    _newItemState = state;
+  setDraggingItemState: function (sn) {
+    _draggingItemState = sn;
   },
 
   setEditingItemId: function (id) {
     _setItemId = id;
+  },
+
+  setErrors: function (errors) {
+    _errors = errors;
   },
 
   setItem: function (item) {
@@ -152,7 +163,11 @@ var ItemStore = Object.assign(EventEmitter.prototype, {
 
   setItems: function (items) {
     _items = items;
-  }
+  },
+
+  setShowNewFormState: function (state) {
+    _newItemState = state;
+  },
 });
 
 AppDispatcher.register(function (payload) {
@@ -177,11 +192,17 @@ AppDispatcher.register(function (payload) {
       break;
     case ItemConstants.ITEM_MOVE:
       ItemStore.moveItem(action.id, action.stateName, action.position);
+      ItemStore.resetDraggingItemState();
       var item = ItemStore.getItem(action.id);
       ItemActions.updateItem(item);
       break;
     case ItemConstants.ITEM_NEW:
       ItemStore.setShowNewFormState(true);
+      break;
+    case ItemConstants.ITEM_SET_STATE:
+      ItemStore.setDraggingItemState(action.state);
+      // return as no re-render is needed
+      return true;
       break;
     case ItemConstants.ITEM_UPDATE:
       ItemStore.setItem(action.item);

@@ -5,13 +5,6 @@ var ItemActions = require("../actions/ItemActions");
 var ItemStore = require("../stores/ItemStore");
 
 var Item = React.createClass({
-  addEvents: function() {
-    document.addEventListener('mousemove', this.onMouseMove);
-    document.addEventListener('touchmove', this.onMouseMove);
-    document.addEventListener('mouseup', this.onMouseUp);
-    document.addEventListener('touchend', this.onMouseUp);
-    document.addEventListener('touchcancel', this.onMouseUp);
-  },
 
   closeForm: function () {
     ItemActions.closeForm();
@@ -35,11 +28,11 @@ var Item = React.createClass({
   // anything w/ a higher z-index that gets in the way, then you're toast,
   // etc.
   componentDidUpdate: function (props, state) {
-    if (this.state.dragging && !state.dragging) {
-      this.addEvents();
-    } else if (!this.state.dragging && state.dragging) {
-      this.removeEvents();
-    }
+    // if (this.state.dragging && !state.dragging) {
+    //   this.addEvents();
+    // } else if (!this.state.dragging && state.dragging) {
+    //   this.removeEvents();
+    // }
 
     if (this.props.editing || this.props.newItem) {
       this.refs.textField.getDOMNode().focus();
@@ -63,8 +56,13 @@ var Item = React.createClass({
     this.setState({title: value});
   },
 
+  onClick: function (e) {
+    e.preventDefault();
+    ItemActions.editItem(this.props.item.id);
+  },
+
   // calculate relative position to the mouse and set dragging=true
-  onMouseDown: function (e) {
+  onDragStart: function (e) {
     // only left mouse button
     if (e.button !== 0) {
       return;
@@ -84,39 +82,19 @@ var Item = React.createClass({
     });
   },
 
-  onMouseMove: function (e) {
-    var deltaX = e.pageX - this.state.originX;
-    var deltaY = e.pageY - this.state.originY;
-
-    this.setState({
-      dragging: true,
-      style: {
-        position: 'absolute',
-        left: this.state.elementX + deltaX + document.body.scrollLeft,
-        top: this.state.elementY + deltaY + document.body.scrollTop,
-        width: this.state.width
-      }
-    });
-  },
-
-  onMouseUp: function (e) {
-    this.removeEvents();
+  onDragEnd: function (e) {
     var x = e.clientX + document.body.scrollLeft;
     var y = e.clientY + document.body.scrollTop;
 
     // TODO: Figure out a way without querying the DOM like this.
-    var stateName;
     var position = 1;
 
     var node = this.getDOMNode();
 
-    $('.item-list-container, a.tab').each(function () {
+    $('.item-list-container').each(function () {
       var rect = this.getBoundingClientRect();
-      if (x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom) {
-        stateName = $(this).data('state-name');
-      }
-
-      if (!$(this).hasClass('tab') && $(this).find('li').length > 0) {
+      // if to re-order
+      if ($(this).find('li').length > 0) {
         var positions = $(this).find('li[id!="'+ node.id +'"]').map(function () {
           return $(this).offset().top;
         });
@@ -126,28 +104,12 @@ var Item = React.createClass({
           }
           position = i + 1;
         }
-
       }
     });
-    if (typeof stateName !== "string" || stateName === "") {
-      e.stopPropagation();
-      return;
-    }
-    else if (this.state.dragging) {
-      this.setState({dragging: false, style: this.getInitialState().style });
-      ItemActions.moveItem(this.props.item.id, stateName, position);
-    }
-    else {
-      ItemActions.editItem(this.props.item.id);
-    }
-  },
 
-  removeEvents: function() {
-    document.removeEventListener('mousemove', this.onMouseMove);
-    document.removeEventListener('touchmove', this.onMouseMove);
-    document.removeEventListener('mouseup', this.onMouseUp);
-    document.removeEventListener('touchend', this.onMouseUp);
-    document.removeEventListener('touchcancel', this.onMouseUp);
+    var stateName = ItemStore.getDraggingItemState();
+    this.setState({style: this.getInitialState().style });
+    ItemActions.moveItem(this.props.item.id, stateName, position);
   },
 
   removeItem: function (e) {
@@ -157,17 +119,17 @@ var Item = React.createClass({
 
   render: function () {
     var item = this.props.item;
-    var className = "item " + (this.state.dragging ? "dragging" : "");
+    var className = "item";
     if (this.props.editing) {
       return (
-        <li className={className} onMouseDown={this.onMouseDown} style={this.state.style}>
+        <li className={className} style={this.state.style}>
           <input ref="textField" type="text" value={this.state.title} onChange={this.onChange} onKeyUp={this.updateItem} />
         </li>
       );
     }
     else if(this.props.newItem) {
       return (
-        <li className={className} onMouseDown={this.onMouseDown} style={this.state.style}>
+        <li className={className} style={this.state.style}>
           <input ref="textField" type="text" value={this.state.title} onChange={this.onChange} onKeyUp={this.saveItem} />
           <a href="#" className="close-btn" onClick={this.closeForm}>x</a>
         </li>
@@ -176,7 +138,7 @@ var Item = React.createClass({
     else {
       if (this.props.loggedIn) {
         return (
-          <li className={className} onMouseDown={this.onMouseDown} style={this.state.style} id={"item_" + this.props.item.id}>
+          <li className={className + " noselect"} onClick={this.onClick} draggable="true" onDragStart={this.onDragStart} onDragEnd={this.onDragEnd} style={this.state.style} id={"item_" + this.props.item.id}>
             <a href="#">{this.state.title}</a>
             <a href="#" className="close-btn" onClick={this.removeItem}>x</a>
           </li>

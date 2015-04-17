@@ -40,9 +40,9 @@ var ProjectShow = React.createClass({
   componentDidMount: function () {
     var id = this.getParams().id;
     ProjectActions.getProjectInformation(id);
-    ProjectStore.addChangeListener(this._onChange);
-    ItemStore.addChangeListener(this._onChange);
-    SessionStore.addChangeListener(this._onSessionChange);
+    ProjectStore.addChangeListener(this.onChange);
+    ItemStore.addChangeListener(this.onChange);
+    SessionStore.addChangeListener(this.onSessionChange);
     SessionActions.verifySession();
     this.screenWidth = window.innerWidth;
     if (window.innerWidth > 600) {
@@ -62,9 +62,9 @@ var ProjectShow = React.createClass({
   },
 
   componentWillUnmount: function () {
-    ProjectStore.removeChangeListener(this._onChange);
-    ItemStore.removeChangeListener(this._onChange);
-    SessionStore.removeChangeListener(this._onSessionChange);
+    ProjectStore.removeChangeListener(this.onChange);
+    ItemStore.removeChangeListener(this.onChange);
+    SessionStore.removeChangeListener(this.onSessionChange);
 
     window.removeEventListener('resize', this.resizeHandler);
   },
@@ -108,29 +108,19 @@ var ProjectShow = React.createClass({
     ItemActions.newItem();
   },
 
-  _onChange: function () {
+  onChange: function () {
     this.setState(getProjectShowState(ProjectStore.getSetId(), ItemStore.getItems()));
   },
 
-  onMouseDown: function (e) {
-    // only left mouse button
-    if (e.button !== 0) {
-      return;
+  onDragEnter: function (e) {
+    var el = e.target;
+    var sn = el.dataset.stateName;
+    if (sn && sn !== "") {
+      ItemActions.setDragState(sn);
     }
-    e.stopPropagation();
-    this.setState({
-      originX: e.pageX,
-      originY: e.pageY,
-      dragging: true
-    });
   },
 
-  onMouseMove: function (e) {
-    var deltaX = e.pageX - this.state.originX;
-    var deltaY = e.pageY - this.state.originY;
-  },
-
-  _onSessionChange: function () {
+  onSessionChange: function () {
     this.setState({ loggedIn: SessionStore.getLoggedInStatus() });
   },
 
@@ -165,7 +155,7 @@ var ProjectShow = React.createClass({
       }
 
       return (
-        <div className="projects project-show items" onMouseDown={this.onMouseDown} onTouchStart={this.onMouseDown} onMouseMove={this.onMouseMove} onTouchMove={this.onMouseMove}>
+        <div className="projects project-show items">
           <h1>{this.state.project.title}</h1>
           <div className="breadcrumb">
             <Link to="projects">Projects</Link>
@@ -174,18 +164,18 @@ var ProjectShow = React.createClass({
           {newItemAction}
           <div className="items">
             <div className="tabs">
-              <a className={"todo-tab tab" + (this.state.focusTodo ? ' focused' : '')} data-state-name="todo" onTouchStart={this.toggleTodo} onClick={this.toggleTodo}>To Do</a>
-              <a className={"inprogress-tab tab" + (this.state.focusInprogress ? ' focused' : '')} data-state-name="inprogress" onClick={this.toggleProgress}>In Progress</a>
-              <a className={"completed-tab tab" + (this.state.focusCompleted ? ' focused' : '')} data-state-name="inprogress" onClick={this.toggleCompleted}>Completed</a>
+              <a onDragEnter={this.onDragEnter} className={"todo-tab tab" + (this.state.focusTodo ? ' focused' : '')} data-state-name="todo" onClick={this.toggleTodo}>To Do</a>
+              <a onDragEnter={this.onDragEnter} className={"inprogress-tab tab" + (this.state.focusInprogress ? ' focused' : '')} data-state-name="inprogress" onClick={this.toggleProgress}>In Progress</a>
+              <a onDragEnter={this.onDragEnter} className={"completed-tab tab" + (this.state.focusCompleted ? ' focused' : '')} data-state-name="completed" onClick={this.toggleCompleted}>Completed</a>
             </div>
             <div className="itemlists">
-              <div className={"todo-items item-list-container" + (this.state.focusTodo ? ' highz' : '')} data-state-name="todo">
+              <div onDragEnter={this.onDragEnter} className={"todo-items item-list-container" + (this.state.focusTodo ? ' highz' : '')} data-state-name="todo">
                 <ItemList projectId={this.state.project.id} items={todoItems} newItem={this.state.renderItemForm} stateName="todo" loggedIn={this.state.loggedIn} />
               </div>
-              <div className={"inprogress-items item-list-container" + (this.state.focusInprogress ? ' highz' : '')} data-state-name="inprogress">
+              <div onDragEnter={this.onDragEnter} className={"inprogress-items item-list-container" + (this.state.focusInprogress ? ' highz' : '')} data-state-name="inprogress">
                 <ItemList projectId={this.state.project.id} items={progressItems} stateName="inprogress" loggedIn={this.state.loggedIn} />
               </div>
-              <div className={"completed-items item-list-container" + (this.state.focusCompleted ? ' highz' : '')} data-state-name="completed">
+              <div onDragEnter={this.onDragEnter} className={"completed-items item-list-container" + (this.state.focusCompleted ? ' highz' : '')} data-state-name="completed">
                 <ItemList projectId={this.state.project.id} items={completedItems} stateName="completed" loggedIn={this.state.loggedIn} />
               </div>
             </div>
