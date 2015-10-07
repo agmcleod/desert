@@ -7,9 +7,8 @@ var Router = require('react-router');
 var ItemStore = require("./ItemStore");
 var LocalStorageSync = require("../local_storage_sync");
 
-var projectSync = new LocalStorageSync("projects");
 var _errors = null;
-var _projects = projectSync.getParsedData();
+var _projects = {};
 var _setId = null;
 
 var CHANGE_EVENT = 'change';

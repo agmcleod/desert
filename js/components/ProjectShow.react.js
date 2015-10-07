@@ -11,6 +11,7 @@ var ItemList = require('./ItemList.react');
 
 var SessionActions = require("../actions/SessionActions");
 var SessionStore = require("../stores/SessionStore");
+var Logout = require('./logout.react.js');
 
 var Router = require("react-router");
 var Link = Router.Link;
@@ -157,6 +158,7 @@ var ProjectShow = React.createClass({
       return (
         <div className="projects project-show items">
           <h1>{this.state.project.title}</h1>
+          <Logout />
           <div className="breadcrumb">
             <Link to="projects">Projects</Link>
             <span>{this.state.project.title}</span>

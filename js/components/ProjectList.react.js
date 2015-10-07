@@ -11,6 +11,7 @@ var ProjectActions = require("../actions/ProjectActions");
 var SessionActions = require("../actions/SessionActions");
 var SessionStore = require("../stores/SessionStore");
 var Loading = require("./Loading.react.js");
+var Logout = require('./logout.react.js');
 
 function getProjectListState (loading) {
   return {
@@ -78,6 +79,7 @@ var ProjectList = React.createClass({
     return (
       <div className="projects">
         <h1>Projects</h1>
+        <Logout />
         <div className="breadcrumb"><span>Projects</span></div>
         {projectActionButton}
         <div className="projectslist">{projectContainers}</div>

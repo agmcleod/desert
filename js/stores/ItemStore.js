@@ -3,14 +3,11 @@ var EventEmitter = require("events").EventEmitter;
 var ItemConstants = require("../constants/ItemConstants");
 var AppConstants = require("../constants/AppConstants");
 var ItemActions = require("../actions/ItemActions");
-var LocalStorageSync = require("../local_storage_sync");
-
-var itemSync = new LocalStorageSync('items');
 
 var CHANGE_EVENT = 'change';
 
 var _newItemState = false;
-var _items = itemSync.getParsedData();
+var _items = {};
 var _setItemId = null;
 var _draggingItemState = null;
 var _errors = null;
