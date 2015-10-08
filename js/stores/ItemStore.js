@@ -99,6 +99,9 @@ var ItemStore = Object.assign(EventEmitter.prototype, {
   },
 
   moveItem: function (id, stateName, position) {
+    if (!stateName || stateName === '') {
+      return;
+    }
     var item = _items[id];
 
     var temp = this.getItemsByState(item.state);
@@ -112,9 +115,7 @@ var ItemStore = Object.assign(EventEmitter.prototype, {
       it.position = i + 1;
     }
 
-    if (stateName && stateName !== "") {
-      item.state = stateName;
-    }
+    item.state = stateName;
     item.position = position;
 
     temp = this.getItemsByState(item.state);

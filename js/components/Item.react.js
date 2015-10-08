@@ -4,6 +4,13 @@ var ReactPropTypes = React.PropTypes;
 var ItemActions = require("../actions/ItemActions");
 var ItemStore = require("../stores/ItemStore");
 
+function intersectRect(r1, r2) {
+  return !(r2.left > r1.right ||
+           r2.right < r1.left ||
+           r2.top > r1.bottom ||
+           r2.bottom < r1.top);
+}
+
 var Item = React.createClass({
 
   closeForm: function () {
@@ -90,9 +97,21 @@ var Item = React.createClass({
     var position = 1;
 
     var node = this.getDOMNode();
+    var stateName = null;
+
+    var _this = this;
 
     $('.item-list-container').each(function () {
       var rect = this.getBoundingClientRect();
+      var offset = $(this).offset();
+      rect.top += offset.top;
+      rect.bottom += offset.top;
+      rect.left += offset.left;
+      rect.right += offset.left;
+      var dragRect = {top: y, left: x, right: x + rect.width, bottom: y + rect.height};
+      if (intersectRect(rect, dragRect) && this.dataset.stateName !== _this.props.item.state) {
+        stateName = this.dataset.stateName;
+      }
       // if to re-order
       if ($(this).find('li').length > 0) {
         var positions = $(this).find('li[id!="'+ node.id +'"]').map(function () {
@@ -107,7 +126,10 @@ var Item = React.createClass({
       }
     });
 
-    var stateName = ItemStore.getDraggingItemState();
+    if (!stateName) {
+      stateName = ItemStore.getDraggingItemState();
+    }
+
     this.setState({style: this.getInitialState().style });
     ItemActions.moveItem(this.props.item.id, stateName, position);
   },
@@ -162,6 +184,7 @@ var Item = React.createClass({
       var value = this.state.title;
       if (value !== null && value.length > 0) {
         ItemActions.createItem(this.state);
+        this.setState({title: null});
       }
     }
   },

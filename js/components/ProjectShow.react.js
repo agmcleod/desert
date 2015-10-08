@@ -171,13 +171,13 @@ var ProjectShow = React.createClass({
               <a onDragEnter={this.onDragEnter} className={"completed-tab tab" + (this.state.focusCompleted ? ' focused' : '')} data-state-name="completed" onClick={this.toggleCompleted}>Completed</a>
             </div>
             <div className="itemlists">
-              <div onDragEnter={this.onDragEnter} className={"todo-items item-list-container" + (this.state.focusTodo ? ' highz' : '')} data-state-name="todo">
+              <div className={"todo-items item-list-container" + (this.state.focusTodo ? ' highz' : '')} data-state-name="todo">
                 <ItemList projectId={this.state.project.id} items={todoItems} newItem={this.state.renderItemForm} stateName="todo" loggedIn={this.state.loggedIn} />
               </div>
-              <div onDragEnter={this.onDragEnter} className={"inprogress-items item-list-container" + (this.state.focusInprogress ? ' highz' : '')} data-state-name="inprogress">
+              <div className={"inprogress-items item-list-container" + (this.state.focusInprogress ? ' highz' : '')} data-state-name="inprogress">
                 <ItemList projectId={this.state.project.id} items={progressItems} stateName="inprogress" loggedIn={this.state.loggedIn} />
               </div>
-              <div onDragEnter={this.onDragEnter} className={"completed-items item-list-container" + (this.state.focusCompleted ? ' highz' : '')} data-state-name="completed">
+              <div className={"completed-items item-list-container" + (this.state.focusCompleted ? ' highz' : '')} data-state-name="completed">
                 <ItemList projectId={this.state.project.id} items={completedItems} stateName="completed" loggedIn={this.state.loggedIn} />
               </div>
             </div>
