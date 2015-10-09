@@ -191,6 +191,7 @@ var ProjectShow = React.createClass({
               <div className={"completed-items item-list-container" + (this.state.focusCompleted ? ' highz' : '')} data-state-name="completed">
                 <ItemList projectId={this.state.project.id} items={completedItems} stateName="completed" loggedIn={this.state.loggedIn} />
               </div>
+              {this.state.renderItemForm || ItemStore.getEditingItemId() ? <p className='instructions'>Press esc to cancel, or enter to save.</p> : null}
             </div>
           </div>
         </div>
