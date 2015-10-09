@@ -12,6 +12,7 @@ var ItemList = require('./ItemList.react');
 var SessionActions = require("../actions/SessionActions");
 var SessionStore = require("../stores/SessionStore");
 var Logout = require('./logout.react.js');
+var Spinner = require('./spinner.react');
 
 var Router = require("react-router");
 var Link = Router.Link;
@@ -88,6 +89,7 @@ var ProjectShow = React.createClass({
         items: items,
         editItem: false,
         focusTodo: true,
+        loading: true,
         renderItemForm: false,
         loggedIn: SessionStore.getLoggedInStatus()
       };
@@ -97,6 +99,7 @@ var ProjectShow = React.createClass({
         project: null,
         items: [],
         editItem: null,
+        loading: true,
         focusTodo: true,
         renderItemForm: false,
         loggedIn: SessionStore.getLoggedInStatus()
@@ -110,7 +113,9 @@ var ProjectShow = React.createClass({
   },
 
   onChange: function () {
-    this.setState(getProjectShowState(ProjectStore.getSetId(), ItemStore.getItems()));
+    this.setState(
+      Object.assign(getProjectShowState(ProjectStore.getSetId(), ItemStore.getItems()), {loading: false})
+    );
   },
 
   onDragEnter: function (e) {
@@ -155,6 +160,11 @@ var ProjectShow = React.createClass({
         </p>);
       }
 
+      var spinner = null;
+      if (this.state.loading) {
+        spinner = <Spinner />;
+      }
+
       return (
         <div className="projects project-show items">
           <h1>{this.state.project.title}</h1>
@@ -163,6 +173,7 @@ var ProjectShow = React.createClass({
             <Link to="projects">Projects</Link>
             <span>{this.state.project.title}</span>
           </div>
+          {spinner}
           {newItemAction}
           <div className="items">
             <div className="tabs">
