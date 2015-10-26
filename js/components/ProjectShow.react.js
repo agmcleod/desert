@@ -16,6 +16,7 @@ var Spinner = require('./spinner.react');
 
 var Router = require("react-router");
 var Link = Router.Link;
+var Contact = require('./Contact.react');
 
 function getProjectShowState (id, items)  {
   return {
@@ -194,6 +195,7 @@ var ProjectShow = React.createClass({
               {this.state.renderItemForm || ItemStore.getEditingItemId() ? <p className='instructions'>Press esc to cancel, or enter to save.</p> : null}
             </div>
           </div>
+          <Contact />
         </div>
       );
     }

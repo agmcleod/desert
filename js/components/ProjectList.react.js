@@ -13,6 +13,7 @@ var SessionStore = require("../stores/SessionStore");
 var Loading = require("./Loading.react.js");
 var Logout = require('./logout.react.js');
 var Spinner = require('./spinner.react');
+var Contact = require('./Contact.react');
 
 function getProjectListState (loading) {
   return {
@@ -85,6 +86,7 @@ var ProjectList = React.createClass({
         {projectActionButton}
         {this.state.loading ? <Loading /> : null}
         <div className="projectslist">{projectContainers}</div>
+        <Contact />
       </div>
     );
   }
