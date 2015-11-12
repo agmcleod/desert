@@ -65,7 +65,7 @@ var ItemActions = {
     ItemDataSource.updateItem(item, function (itemResData) {
       AppDispatcher.handleViewAction({
         actionType: ItemConstants.ITEM_UPDATE,
-        item: itemResData
+        items: itemResData
       });
     }, function (jqXHR) {
       AppDispatcher.handleViewAction({

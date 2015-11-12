@@ -98,6 +98,14 @@ var ItemStore = Object.assign(EventEmitter.prototype, {
     return _newItemState;
   },
 
+  mergeItems: function (items) {
+    for (var id in items) {
+      if (items.hasOwnProperty(id)) {
+        _items[id] = items[id];
+      }
+    }
+  },
+
   moveItem: function (id, stateName, position) {
     if (!stateName || stateName === '') {
       return;
@@ -203,7 +211,7 @@ AppDispatcher.register(function (payload) {
       return true;
       break;
     case ItemConstants.ITEM_UPDATE:
-      ItemStore.setItem(action.item);
+      ItemStore.mergeItems(action.items);
       ItemStore.setEditingItemId(null);
       break;
     case ItemConstants.ITEM_UPDATE_FAIL:
