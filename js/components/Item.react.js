@@ -76,6 +76,7 @@ var Item = React.createClass({
     }
     var pageOffset;
     var el = $(this.getDOMNode());
+    // absolute is used for mobile.
     if (el.parents('.item-list-container').css('position') === 'absolute') {
       pageOffset = { left: 0, top: 0 };
     }
@@ -95,23 +96,9 @@ var Item = React.createClass({
 
     // TODO: Figure out a way without querying the DOM like this.
     var position = 1;
-
     var node = this.getDOMNode();
-    var stateName = null;
-
-    var _this = this;
 
     $('.item-list-container').each(function () {
-      var rect = this.getBoundingClientRect();
-      var offset = $(this).offset();
-      rect.top += offset.top;
-      rect.bottom += offset.top;
-      rect.left += offset.left;
-      rect.right += offset.left;
-      var dragRect = {top: y, left: x, right: x + rect.width, bottom: y + rect.height};
-      if (intersectRect(rect, dragRect) && this.dataset.stateName !== _this.props.item.state) {
-        stateName = this.dataset.stateName;
-      }
       // if to re-order
       if ($(this).find('li').length > 0) {
         var positions = $(this).find('li[id!="'+ node.id +'"]').map(function () {
@@ -126,9 +113,7 @@ var Item = React.createClass({
       }
     });
 
-    if (!stateName) {
-      stateName = ItemStore.getDraggingItemState();
-    }
+    var stateName = ItemStore.getDraggingItemState() || this.props.item.state;
 
     this.setState({style: this.getInitialState().style });
     ItemActions.moveItem(this.props.item.id, stateName, position);
