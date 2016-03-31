@@ -52,7 +52,7 @@ var ProjectNew = React.createClass({
       <div className="projects projects-new">
         <h1>New Project</h1>
         <div className="breadcrumb">
-          <Link to="projects">Projects</Link>
+          <Link to="/projects">Projects</Link>
           <span>New Project</span>
         </div>
         <form action="/projects" method="post" onSubmit={this.saveProject}>

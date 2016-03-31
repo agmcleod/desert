@@ -41,7 +41,7 @@ function itemSort (a, b) {
 var ProjectShow = React.createClass({
   mixins: [ Router.State ],
   componentDidMount: function () {
-    var id = this.getParams().id;
+    var id = this.props.params.id;
     ProjectActions.getProjectInformation(id);
     ProjectStore.addChangeListener(this.onChange);
     ItemStore.addChangeListener(this.onChange);
@@ -82,7 +82,7 @@ var ProjectShow = React.createClass({
   },
 
   getInitialState: function () {
-    var project = ProjectStore.findById(this.getParams().id);
+    var project = ProjectStore.findById(this.props.params.id);
     if (project) {
       var items = ItemStore.getItems(project.id);
       return {
@@ -171,7 +171,7 @@ var ProjectShow = React.createClass({
           <h1>{this.state.project.title}</h1>
           <TopLinks />
           <div className="breadcrumb">
-            <Link to="projects">Projects</Link>
+            <Link to="/projects">Projects</Link>
             <span>{this.state.project.title}</span>
           </div>
           {spinner}

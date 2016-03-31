@@ -22,7 +22,7 @@ var ProjectEdit = React.createClass({
   mixins: [ProjectFormMixin, Router.Navigation, Router.State],
   componentDidMount: function () {
     ProjectStore.addChangeListener(this._onChange);
-    var id = this.getParams().id;
+    var id = this.props.params.id;
     ProjectActions.getProjectInformation(id);
   },
 
@@ -60,8 +60,7 @@ var ProjectEdit = React.createClass({
       <div className="projects projects-new">
         <h1>Edit Project</h1>
         <div className="breadcrumb">
-          <Link to="app">Home</Link>
-          <Link to="projects">Projects</Link>
+          <Link to="/">Home</Link>
           <span>Edit</span>
         </div>
         <form action="/projects" method="post" onSubmit={this.updateProject}>

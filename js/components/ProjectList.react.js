@@ -75,7 +75,7 @@ var ProjectList = React.createClass({
     }
     var projectActionButton = null;
     if (this.state.loggedIn) {
-      projectActionButton = (<p className="action-btn"><Link to="projects/new">Start New Project</Link></p>);
+      projectActionButton = (<p className="action-btn"><Link to="/projects/new">Start New Project</Link></p>);
     }
     return (
       <div className="projects">
