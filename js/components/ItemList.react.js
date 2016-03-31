@@ -32,8 +32,8 @@ var ItemList = React.createClass({
   }
 });
 
-const target = {
-  drop(props, monitor) {
+var target = {
+  drop: function(props, monitor) {
     props.onDrop(monitor.getItem());
   }
 };
