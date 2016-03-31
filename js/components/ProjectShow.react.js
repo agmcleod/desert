@@ -11,12 +11,12 @@ var ItemList = require('./ItemList.react');
 
 var SessionActions = require("../actions/SessionActions");
 var SessionStore = require("../stores/SessionStore");
-var Logout = require('./logout.react.js');
 var Spinner = require('./spinner.react');
+
+var TopLinks = require('./TopLinks.react');
 
 var Router = require("react-router");
 var Link = Router.Link;
-var Contact = require('./Contact.react');
 
 function getProjectShowState (id, items)  {
   return {
@@ -169,7 +169,7 @@ var ProjectShow = React.createClass({
       return (
         <div className="projects project-show items">
           <h1>{this.state.project.title}</h1>
-          <Logout />
+          <TopLinks />
           <div className="breadcrumb">
             <Link to="projects">Projects</Link>
             <span>{this.state.project.title}</span>
@@ -195,7 +195,6 @@ var ProjectShow = React.createClass({
               {this.state.renderItemForm || ItemStore.getEditingItemId() ? <p className='instructions'>Press esc to cancel, or enter to save.</p> : null}
             </div>
           </div>
-          <Contact />
         </div>
       );
     }

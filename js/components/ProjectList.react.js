@@ -11,9 +11,8 @@ var ProjectActions = require("../actions/ProjectActions");
 var SessionActions = require("../actions/SessionActions");
 var SessionStore = require("../stores/SessionStore");
 var Loading = require("./Loading.react.js");
-var Logout = require('./logout.react.js');
 var Spinner = require('./spinner.react');
-var Contact = require('./Contact.react');
+var TopLinks = require('./TopLinks.react');
 
 function getProjectListState (loading) {
   return {
@@ -81,12 +80,11 @@ var ProjectList = React.createClass({
     return (
       <div className="projects">
         <h1>Projects</h1>
-        <Logout />
+        <TopLinks />
         <div className="breadcrumb"><span>Projects</span></div>
         {projectActionButton}
         {this.state.loading ? <Loading /> : null}
         <div className="projectslist">{projectContainers}</div>
-        <Contact />
       </div>
     );
   }
