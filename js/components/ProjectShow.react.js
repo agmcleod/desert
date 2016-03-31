@@ -123,7 +123,9 @@ var ProjectShow = React.createClass({
   },
 
   onItemDrop: function (stateName, item) {
-    ItemActions.moveItem(item.id, stateName, 0);
+    if (item.state !== stateName) {
+      ItemActions.moveItem(item.id, stateName, 0);
+    }
   },
 
   onSessionChange: function () {

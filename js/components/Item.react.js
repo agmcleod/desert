@@ -5,6 +5,9 @@ var ItemStore = require("../stores/ItemStore");
 var ItemConstants = require("../constants/ItemConstants");
 
 var DragSource = require('react-dnd').DragSource;
+var DropTarget = require('react-dnd').DropTarget;
+
+var findDOMNode = require('react-dom').findDOMNode;
 
 var Item = React.createClass({
 
@@ -23,22 +26,6 @@ var Item = React.createClass({
       this.setState({project_id: this.props.projectId});
     }
 
-  },
-
-  // we could get away with not having this (and just having the listeners on
-  // our div), but then the experience would be possibly be janky. If there's
-  // anything w/ a higher z-index that gets in the way, then you're toast,
-  // etc.
-  componentDidUpdate: function (props, state) {
-    // if (this.state.dragging && !state.dragging) {
-    //   this.addEvents();
-    // } else if (!this.state.dragging && state.dragging) {
-    //   this.removeEvents();
-    // }
-
-    if (this.props.editing || this.props.newItem) {
-      this.refs.textField.getDOMNode().focus();
-    }
   },
 
   getInitialState: function() {
@@ -64,7 +51,9 @@ var Item = React.createClass({
   },
 
   render: function () {
-    return this.props.connectDragSource(this.renderListItem());
+    return this.props.connectDragSource(
+      this.props.connectDropTarget(this.renderListItem())
+    );
   },
 
   renderListItem: function () {
@@ -130,19 +119,75 @@ var Item = React.createClass({
   }
 });
 
-var boxSource = {
+var itemSource = {
   beginDrag: function(props) {
     return {
-      id: props.item.id
+      id: props.item.id,
+      state: props.item.state,
+      position: props.item.position
     };
   }
 };
 
-function collect(connect, monitor) {
+var cardTarget = {
+  drop: function (props, monitor, component) {
+    var dragIndex = monitor.getItem().position;
+    var hoverIndex = props.item.position;
+
+    // Don't replace items with themselves
+    if (dragIndex === hoverIndex) {
+      return;
+    }
+
+    // Determine rectangle on screen
+    var hoverBoundingRect = findDOMNode(component).getBoundingClientRect();
+
+    // Get vertical middle
+    var hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+
+    // Determine mouse position
+    var clientOffset = monitor.getClientOffset();
+
+    // Get pixels to the top
+    var hoverClientY = clientOffset.y - hoverBoundingRect.top;
+
+    // Only perform the move when the mouse has crossed half of the items height
+    // When dragging downwards, only move when the cursor is below 50%
+    // When dragging upwards, only move when the cursor is above 50%
+
+    // Dragging downwards
+    if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
+      return;
+    }
+
+    // Dragging upwards
+    if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
+      return;
+    }
+
+    // Time to actually perform the action
+    console.log('drop');
+    ItemActions.moveItem(props.item.id, props.item.state, hoverIndex - 1);
+
+    // Note: we're mutating the monitor item here!
+    // Generally it's better to avoid mutations,
+    // but it's good here for the sake of performance
+    // to avoid expensive index searches.
+    // monitor.getItem().index = hoverIndex;
+  }
+};
+
+function dragCollect(connect, monitor) {
   return {
     connectDragSource: connect.dragSource(),
     isDragging: monitor.isDragging()
   };
 }
 
-module.exports = DragSource(ItemConstants.ITEM_TYPE, boxSource, collect)(Item);
+function dropCollect(connect) {
+  return {
+    connectDropTarget: connect.dropTarget()
+  };
+}
+
+module.exports = DropTarget(ItemConstants.ITEM_TYPE, cardTarget, dropCollect)(DragSource(ItemConstants.ITEM_TYPE, itemSource, dragCollect)(Item));
