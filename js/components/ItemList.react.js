@@ -5,6 +5,8 @@
 var React = require("react");
 var Item = require('./Item.react');
 var ItemStore = require('../stores/ItemStore');
+var DropTarget = require('react-dnd').DropTarget;
+var ItemConstants = require("../constants/ItemConstants");
 
 var ItemList = React.createClass({
   render: function () {
@@ -21,8 +23,8 @@ var ItemList = React.createClass({
       form = <Item projectId={this.props.projectId} newItem={true} />
     }
 
-    return (
-      <ul className={this.props.stateName}>
+    return this.props.connectDropTarget(
+      <ul className={this.props.stateName + ' item-list'}>
         {itemList}
         {form}
       </ul>
@@ -30,4 +32,16 @@ var ItemList = React.createClass({
   }
 });
 
-module.exports = ItemList;
+const target = {
+  drop(props, monitor) {
+    props.onDrop(monitor.getItem());
+  }
+};
+
+function collect(connect, monitor) {
+  return {
+    connectDropTarget: connect.dropTarget()
+  };
+}
+
+module.exports = DropTarget([ItemConstants.ITEM_TYPE], target, collect)(ItemList);

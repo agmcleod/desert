@@ -18,6 +18,9 @@ var TopLinks = require('./TopLinks.react');
 var Router = require("react-router");
 var Link = Router.Link;
 
+var DragDropContext = require('react-dnd').DragDropContext;
+var HTML5Backend = require('react-dnd-html5-backend');
+
 function getProjectShowState (id, items)  {
   return {
     project: ProjectStore.findById(id),
@@ -119,12 +122,8 @@ var ProjectShow = React.createClass({
     );
   },
 
-  onDragEnter: function (e) {
-    var el = e.target;
-    var sn = el.dataset.stateName;
-    if (sn && sn !== "") {
-      ItemActions.setDragState(sn);
-    }
+  onItemDrop: function (stateName, item) {
+    ItemActions.moveItem(item.id, stateName, 0);
   },
 
   onSessionChange: function () {
@@ -178,19 +177,19 @@ var ProjectShow = React.createClass({
           {newItemAction}
           <div className="items">
             <div className="tabs">
-              <a onDragEnter={this.onDragEnter} className={"todo-tab tab" + (this.state.focusTodo ? ' focused' : '')} data-state-name="todo" onClick={this.toggleTodo}>To Do</a>
-              <a onDragEnter={this.onDragEnter} className={"inprogress-tab tab" + (this.state.focusInprogress ? ' focused' : '')} data-state-name="inprogress" onClick={this.toggleProgress}>In Progress</a>
-              <a onDragEnter={this.onDragEnter} className={"completed-tab tab" + (this.state.focusCompleted ? ' focused' : '')} data-state-name="completed" onClick={this.toggleCompleted}>Completed</a>
+              <a className={"todo-tab tab" + (this.state.focusTodo ? ' focused' : '')} data-state-name="todo" onClick={this.toggleTodo}>To Do</a>
+              <a className={"inprogress-tab tab" + (this.state.focusInprogress ? ' focused' : '')} data-state-name="inprogress" onClick={this.toggleProgress}>In Progress</a>
+              <a className={"completed-tab tab" + (this.state.focusCompleted ? ' focused' : '')} data-state-name="completed" onClick={this.toggleCompleted}>Completed</a>
             </div>
             <div className="itemlists">
-              <div onDragEnter={this.onDragEnter} className={"todo-items item-list-container" + (this.state.focusTodo ? ' highz' : '')} data-state-name="todo">
-                <ItemList projectId={this.state.project.id} items={todoItems} newItem={this.state.renderItemForm} stateName="todo" loggedIn={this.state.loggedIn} />
+              <div className={"todo-items item-list-container" + (this.state.focusTodo ? ' highz' : '')} data-state-name="todo">
+                <ItemList projectId={this.state.project.id} onDrop={this.onItemDrop.bind(this, 'todo')} items={todoItems} newItem={this.state.renderItemForm} stateName="todo" loggedIn={this.state.loggedIn} />
               </div>
-              <div onDragEnter={this.onDragEnter} className={"inprogress-items item-list-container" + (this.state.focusInprogress ? ' highz' : '')} data-state-name="inprogress">
-                <ItemList projectId={this.state.project.id} items={progressItems} stateName="inprogress" loggedIn={this.state.loggedIn} />
+              <div className={"inprogress-items item-list-container" + (this.state.focusInprogress ? ' highz' : '')} data-state-name="inprogress">
+                <ItemList projectId={this.state.project.id} onDrop={this.onItemDrop.bind(this, 'inprogress')} items={progressItems} stateName="inprogress" loggedIn={this.state.loggedIn} />
               </div>
-              <div onDragEnter={this.onDragEnter} className={"completed-items item-list-container" + (this.state.focusCompleted ? ' highz' : '')} data-state-name="completed">
-                <ItemList projectId={this.state.project.id} items={completedItems} stateName="completed" loggedIn={this.state.loggedIn} />
+              <div className={"completed-items item-list-container" + (this.state.focusCompleted ? ' highz' : '')} data-state-name="completed">
+                <ItemList projectId={this.state.project.id} onDrop={this.onItemDrop.bind(this, 'completed')} items={completedItems} stateName="completed" loggedIn={this.state.loggedIn} />
               </div>
               {this.state.renderItemForm || ItemStore.getEditingItemId() ? <p className='instructions'>Press esc to cancel, or enter to save.</p> : null}
             </div>
@@ -254,4 +253,4 @@ var ProjectShow = React.createClass({
   }
 });
 
-module.exports = ProjectShow;
+module.exports = DragDropContext(HTML5Backend)(ProjectShow);

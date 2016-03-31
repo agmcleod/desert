@@ -10,5 +10,6 @@ module.exports = keyMirror({
   ITEM_NEW: null,
   ITEM_SET_STATE: null,
   ITEM_UPDATE: null,
-  ITEM_UPDATE_FAIL: null
+  ITEM_UPDATE_FAIL: null,
+  ITEM_TYPE: null
 });

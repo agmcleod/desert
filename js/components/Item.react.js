@@ -1,15 +1,10 @@
 /** @jsx React.DOM */
 var React = require('react');
-var ReactPropTypes = React.PropTypes;
 var ItemActions = require("../actions/ItemActions");
 var ItemStore = require("../stores/ItemStore");
+var ItemConstants = require("../constants/ItemConstants");
 
-function intersectRect(r1, r2) {
-  return !(r2.left > r1.right ||
-           r2.right < r1.left ||
-           r2.top > r1.bottom ||
-           r2.bottom < r1.top);
-}
+var DragSource = require('react-dnd').DragSource;
 
 var Item = React.createClass({
 
@@ -46,15 +41,10 @@ var Item = React.createClass({
     }
   },
 
-  getInitialState: function () {
+  getInitialState: function() {
     return {
-      style: {
-        top: 0,
-        left: 0,
-        position: 'static'
-      },
-      dragging: false
-    }
+      title: null
+    };
   },
 
   onChange: function (e) {
@@ -68,75 +58,28 @@ var Item = React.createClass({
     ItemActions.editItem(this.props.item.id);
   },
 
-  // calculate relative position to the mouse and set dragging=true
-  onDragStart: function (e) {
-    // only left mouse button
-    if (e.button !== 0) {
-      return;
-    }
-    var pageOffset;
-    var el = $(this.getDOMNode());
-    // absolute is used for mobile.
-    if (el.parents('.item-list-container').css('position') === 'absolute') {
-      pageOffset = { left: 0, top: 0 };
-    }
-    else {
-      pageOffset = el.offset();
-    }
-    this.setState({
-      elementX: pageOffset.left,
-      elementY: pageOffset.top,
-      width: $(this.getDOMNode()).width()
-    });
-  },
-
-  onDragEnd: function (e) {
-    var x = e.clientX + document.body.scrollLeft;
-    var y = e.clientY + document.body.scrollTop;
-
-    // TODO: Figure out a way without querying the DOM like this.
-    var position = 1;
-    var node = this.getDOMNode();
-
-    $('.item-list-container').each(function () {
-      // if to re-order
-      if ($(this).find('li').length > 0) {
-        var positions = $(this).find('li[id!="'+ node.id +'"]').map(function () {
-          return $(this).offset().top;
-        });
-        for (var i = 0; i < positions.length; i++) {
-          if (y < positions[i]) {
-            break;
-          }
-          position = i + 1;
-        }
-      }
-    });
-
-    var stateName = ItemStore.getDraggingItemState() || this.props.item.state;
-
-    this.setState({style: this.getInitialState().style });
-    ItemActions.moveItem(this.props.item.id, stateName, position);
-  },
-
   removeItem: function (e) {
     e.preventDefault();
     ItemActions.removeItem(this.props.item.id);
   },
 
   render: function () {
+    return this.props.connectDragSource(this.renderListItem());
+  },
+
+  renderListItem: function () {
     var item = this.props.item;
     var className = "item";
     if (this.props.editing) {
       return (
-        <li className={className} style={this.state.style}>
+        <li className={className}>
           <input ref="textField" type="text" value={this.state.title} onChange={this.onChange} onKeyUp={this.updateItem} />
         </li>
       );
     }
     else if(this.props.newItem) {
       return (
-        <li className={className} style={this.state.style}>
+        <li className={className}>
           <input ref="textField" type="text" value={this.state.title} onChange={this.onChange} onKeyUp={this.saveItem} />
           <a href="#" className="close-btn" onClick={this.closeForm}>x</a>
         </li>
@@ -145,7 +88,7 @@ var Item = React.createClass({
     else {
       if (this.props.loggedIn) {
         return (
-          <li className={className} onClick={this.onClick} draggable="true" onDragStart={this.onDragStart} onDragEnd={this.onDragEnd} style={this.state.style} id={"item_" + this.props.item.id}>
+          <li className={className} onClick={this.onClick} draggable="true" id={"item_" + this.props.item.id}>
             <span href="#">{this.state.title}</span>
             <span href="#" className="close-btn" onClick={this.removeItem}>x</span>
           </li>
@@ -153,7 +96,7 @@ var Item = React.createClass({
       }
       else {
         return (
-          <li className={className} style={this.state.style} id={"item_" + this.props.item.id}>
+          <li className={className} style={this.props.isDragging ? {opacity: 0.5} : {opacity: 1}} id={"item_" + this.props.item.id}>
             <a href="#">{this.state.title}</a>
           </li>
         );
@@ -187,4 +130,19 @@ var Item = React.createClass({
   }
 });
 
-module.exports = Item;
+var boxSource = {
+  beginDrag: function(props) {
+    return {
+      id: props.item.id
+    };
+  }
+};
+
+function collect(connect, monitor) {
+  return {
+    connectDragSource: connect.dragSource(),
+    isDragging: monitor.isDragging()
+  };
+}
+
+module.exports = DragSource(ItemConstants.ITEM_TYPE, boxSource, collect)(Item);
