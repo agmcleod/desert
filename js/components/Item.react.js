@@ -131,7 +131,8 @@ var itemSource = {
 
 var cardTarget = {
   drop: function (props, monitor, component) {
-    var dragIndex = monitor.getItem().position;
+    var item = monitor.getItem();
+    var dragIndex = item.position;
     var hoverIndex = props.item.position;
 
     // Don't replace items with themselves
@@ -166,8 +167,7 @@ var cardTarget = {
     }
 
     // Time to actually perform the action
-    console.log('drop');
-    ItemActions.moveItem(props.item.id, props.item.state, hoverIndex - 1);
+    ItemActions.moveItem(item.id, item.state, hoverIndex - 1);
 
     // Note: we're mutating the monitor item here!
     // Generally it's better to avoid mutations,
