@@ -122,18 +122,18 @@ var Item = React.createClass({
 var itemSource = {
   beginDrag: function(props) {
     return {
-      id: props.item.id,
-      state: props.item.state,
-      position: props.item.position
+      item: props.item
     };
   }
 };
 
 var cardTarget = {
   drop: function (props, monitor, component) {
-    var item = monitor.getItem();
+    var item = monitor.getItem().item;
     var dragIndex = item.position;
     var hoverIndex = props.item.position;
+
+    console.log(dragIndex, item.title, hoverIndex, props.item.title);
 
     // Don't replace items with themselves
     if (dragIndex === hoverIndex) {
@@ -156,6 +156,8 @@ var cardTarget = {
     // When dragging downwards, only move when the cursor is below 50%
     // When dragging upwards, only move when the cursor is above 50%
 
+    console.log(hoverClientY, hoverMiddleY);
+
     // Dragging downwards
     if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
       return;
@@ -166,8 +168,17 @@ var cardTarget = {
       return;
     }
 
+    var targetIndex = dragIndex;
+    if (dragIndex < hoverIndex) {
+      targetIndex += 1;
+    } else if (dragIndex > hoverIndex) {
+      targetIndex -= 1;
+    }
+
+    console.log('target: ' + targetIndex);
+
     // Time to actually perform the action
-    ItemActions.moveItem(item.id, item.state, hoverIndex - 1);
+    ItemActions.moveItem(item.id, item.state, targetIndex);
 
     // Note: we're mutating the monitor item here!
     // Generally it's better to avoid mutations,

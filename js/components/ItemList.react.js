@@ -34,7 +34,7 @@ var ItemList = React.createClass({
 
 var target = {
   drop: function(props, monitor) {
-    props.onDrop(monitor.getItem());
+    props.onDrop(monitor.getItem().item);
   }
 };
 
