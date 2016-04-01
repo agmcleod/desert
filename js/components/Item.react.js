@@ -133,8 +133,6 @@ var cardTarget = {
     var dragIndex = item.position;
     var hoverIndex = props.item.position;
 
-    console.log(dragIndex, item.title, hoverIndex, props.item.title);
-
     // Don't replace items with themselves
     if (dragIndex === hoverIndex) {
       return;
@@ -156,8 +154,6 @@ var cardTarget = {
     // When dragging downwards, only move when the cursor is below 50%
     // When dragging upwards, only move when the cursor is above 50%
 
-    console.log(hoverClientY, hoverMiddleY);
-
     // Dragging downwards
     if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
       return;
@@ -174,8 +170,6 @@ var cardTarget = {
     } else if (dragIndex > hoverIndex) {
       targetIndex -= 1;
     }
-
-    console.log('target: ' + targetIndex);
 
     // Time to actually perform the action
     ItemActions.moveItem(item.id, item.state, targetIndex);
