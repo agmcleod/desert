@@ -4,18 +4,18 @@
 
 var React = require("react");
 
-var Error = React.createClass({
+var ErrorMessage = React.createClass({
   render: function () {
     var message = this.props.message;
-    if (message !== null && message !== "") {
+    if (message && message !== "") {
       return (
         <p className="error">{message}</p>
       );
     }
     else {
-      return "";
+      return <div />;
     }
   }
 });
 
-module.exports = Error;
+module.exports = ErrorMessage;

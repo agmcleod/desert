@@ -3,7 +3,7 @@
  */
 
 var React = require('react');
-var Error = require('./Error.react');
+var ErrorMessage = require('./Error.react');
 var ProjectActions = require('../actions/ProjectActions');
 var ProjectStore = require('../stores/ProjectStore');
 var ProjectFormMixin = require("../mixins/ProjectFormMixin");
@@ -11,7 +11,7 @@ var Router = require("react-router");
 var Link = Router.Link;
 
 var ProjectNew = React.createClass({
-  mixins: [ProjectFormMixin, Router.Navigation],
+  mixins: [ProjectFormMixin],
   componentDidMount: function () {
     ProjectStore.addChangeListener(this._onChange);
   },
@@ -39,7 +39,7 @@ var ProjectNew = React.createClass({
   _onChange: function () {
     var errors = ProjectStore.getErrors();
     if (errors === null) {
-      this.transitionTo("/projects");
+      Router.browserHistory.push("/projects");
     }
     else {
       this.setState({ title: this.state.title, description: this.state.description, errors: errors });
@@ -56,16 +56,16 @@ var ProjectNew = React.createClass({
           <span>New Project</span>
         </div>
         <form action="/projects" method="post" onSubmit={this.saveProject}>
-          <Error message={messages['access']} />
+          <ErrorMessage message={messages['access']} />
           <div className="field text-field">
             <label htmlFor="title">Title</label>
             <input className="textField" type="text" name="title" id="title" onChange={this.handleChange("title")} value={this.state.title} />
-            <Error message={messages['title']} />
+            <ErrorMessage message={messages['title']} />
           </div>
           <div className="field">
             <label htmlFor="description">Description</label>
             <textarea id="description" value={this.state.description} rows="4" onChange={this.handleChange("description")} />
-            <Error message={messages['description']} />
+            <ErrorMessage message={messages['description']} />
           </div>
           <div className="field field-submit">
             <input type="submit" />

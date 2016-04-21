@@ -1,8 +1,8 @@
 var ProjectFormMixin = {
   getErrorMessages: function (state) {
     var messages = {};
-    if (state.errors !== null) {
-      var errors = state.errors;
+    var errors = state.errors;
+    if (errors) {
       if (errors.title) {
         messages['title'] = errors.title.join(', ');
       }

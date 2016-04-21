@@ -15,7 +15,7 @@ var Project = React.createClass({
       return null;
     }
     if (this.props.loggedIn) {
-      editAction = (<Link to={"/projects/" + project.id} className="edit">Edit</Link>);
+      editAction = (<Link to={"/projects/" + project.id + "/edit"} className="edit">Edit</Link>);
     }
     return (
       <div className="project">

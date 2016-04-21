@@ -1,3 +1,7 @@
+/**
+ * @jsx React.DOM
+ */
+
 var React = require("react");
 
 var ProjectStore = require('../stores/ProjectStore');
@@ -6,6 +10,7 @@ var Loading = require("./Loading.react");
 var Router = require("react-router");
 var Link = Router.Link;
 var ProjectFormMixin = require("../mixins/ProjectFormMixin");
+var ErrorMessage = require("./Error.react");
 
 function getProjectEditState (id, errors) {
   var project = ProjectStore.findById(id);
@@ -19,7 +24,7 @@ function getProjectEditState (id, errors) {
 }
 
 var ProjectEdit = React.createClass({
-  mixins: [ProjectFormMixin, Router.Navigation, Router.State],
+  mixins: [ProjectFormMixin],
   componentDidMount: function () {
     ProjectStore.addChangeListener(this._onChange);
     var id = this.props.params.id;
@@ -50,7 +55,7 @@ var ProjectEdit = React.createClass({
     var errors = ProjectStore.getErrors();
     this.setState(getProjectEditState(ProjectStore.getSetId(), errors));
     if (errors === null && this.state.updated) {
-      this.transitionTo("/projects");
+      Router.browserHistory.push("/projects");
     }
   },
 
@@ -64,16 +69,16 @@ var ProjectEdit = React.createClass({
           <span>Edit</span>
         </div>
         <form action="/projects" method="post" onSubmit={this.updateProject}>
-          <Error message={messages['access']} />
+          <ErrorMessage message={messages['access']} />
           <div className="field text-field">
             <label htmlFor="title">Title</label>
             <input className="textField" type="text" name="title" id="title" onChange={this.handleChange("title")} value={this.state.title} />
-            <Error message={messages['title']} />
+            <ErrorMessage message={messages['title']} />
           </div>
           <div className="field">
             <label htmlFor="description">Description</label>
             <textarea id="description" value={this.state.description} rows="4" onChange={this.handleChange("description")} />
-            <Error message={messages['description']} />
+            <ErrorMessage message={messages['description']} />
           </div>
           <div className="field field-submit">
             <input type="submit" />
